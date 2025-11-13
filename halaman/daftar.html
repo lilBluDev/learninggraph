@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Daftar</title>
+    <link rel="stylesheet" href="/public/daftarlogin.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="side-panel" id="sidePanel">
+            <div id="sidePanelContent">
+                <h2>Sudah Punya Akun?</h2>
+                <p>Masuk sekarang dan lanjutkan aktivitas Anda bersama kami.</p>
+                <a class="switch-btn" href="/login">Masuk</a>
+            </div>
+        </div>
+
+        <div class="form-panel">
+            <!-- Form Daftar -->
+            <div class="form-container active" id="registerForm">
+                <h1>Daftar</h1>
+                <p class="subtitle">Buat akun baru Anda</p>
+                
+                <div class="success-message" id="registerSuccess">
+                    Pendaftaran berhasil! Silakan login.
+                </div>
+
+                <form onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <label for="registerName">Nama Lengkap</label>
+                        <input type="text" id="registerName" placeholder="Nama lengkap Anda" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" placeholder="nama@email.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="registerPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="registerPassword" placeholder="Minimal 6 karakter" required minlength="6">
+                            <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirmPassword">Konfirmasi Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" placeholder="Ulangi password" required minlength="6">
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword', this)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Daftar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/public/daftarlogin.js"></script>
+</body>
+</html>

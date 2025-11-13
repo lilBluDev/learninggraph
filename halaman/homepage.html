@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearningGraph - Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/sidebar.css" />
+    <link rel="stylesheet" href="/public/homepage.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <komponen sidebar />
+
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1>Welcome <a id="userName">X</a>!</h1>
+        </div>
+    </div>
+
+    <!-- Notification Button -->
+    <button class="notification-btn" onclick="showNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+    </button>
+    </main>
+
+    <script src="/public/dash.js"></script>
+    <script src="/public/homepage.js"></script>
+</body>
+</html>
