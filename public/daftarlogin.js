@@ -48,6 +48,7 @@ async function handleLogin(event) {
             console.log("success", data)
             // Simpan token ke localStorage
             localStorage.setItem('token', data.data.token);
+            sessionStorage.setItem('userId', data.data.user._id);
             console.log("token saved")
             
             // Tampilkan pesan sukses

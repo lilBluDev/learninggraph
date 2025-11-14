@@ -51,6 +51,7 @@ export const verifyToken = async (req, res, next) => {
 
 // Middleware untuk cek apakah sudah login (untuk route HTML)
 export const requireAuth = (req, res, next) => {
+    console.log("Checking auth", req.session);
     if (!req.session?.userId) {
         return res.redirect('/login');
     }

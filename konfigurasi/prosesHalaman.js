@@ -88,7 +88,7 @@ export default function prosesHalaman(halaman) {
         data = data.replaceAll(re, komponenData);
     }
 
-    data = injectIntoHead(data, '<link rel="icon" href="/public/LGlogo.png">')
+    data = injectIntoHead(data, '<link rel="icon" href="/public/lglogo.png">')
 
     halamanCache.set(halaman, data);
     return data;
