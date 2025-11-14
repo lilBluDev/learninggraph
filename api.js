@@ -1,8 +1,11 @@
 import { Router } from "express";
+import catatanRoute from "./apiCatatan.js";
 import { generateToken, verifyToken } from "./middleware/auth.js";
 import User from "./skema/user.js";
 
 const route = Router();
+
+route.use("/catatan", catatanRoute);
 
 // Register
 route.post("/register", async (req, res) => {
@@ -262,5 +265,7 @@ route.post("/xp/add", verifyToken, async (req, res) => {
         });
     }
 });
+
+
 
 export default route;

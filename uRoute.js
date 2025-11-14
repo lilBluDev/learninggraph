@@ -7,4 +7,8 @@ route.get("/", (req,res) => {
     res.send(prosesHalaman('homepage'))
 })
 
+route.get("/catatan", (req,res) => {
+    res.send(prosesHalaman('catatan'))
+})
+
 export default route

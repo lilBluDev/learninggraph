@@ -21,7 +21,6 @@ function toggleSidebar() {
 // Handle Logout
 function handleLogout() {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
-        alert('Logout berhasil! Terima kasih telah menggunakan LearningGraph.');
         fetch('/api/logout', {
             method: 'POST',
         })
@@ -36,7 +35,8 @@ function showNotifications() {
 
 // Navigate to different sections
 function navigateTo(section) {
-    alert(`Navigasi ke halaman: ${section.toUpperCase()}\n\nFitur ini akan segera tersedia!`);
+    // alert(`Navigasi ke halaman: ${section.toUpperCase()}\n\nFitur ini akan segera tersedia!`);
+    window.location.href = "/u/"+section
 }
 
 // Close sidebar when clicking outside on mobile
