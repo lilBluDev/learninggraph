@@ -49,7 +49,7 @@ app.use("/api", APIroute);
 app.use("/u", requireAuth, UserRoute); // Protected route
 
 // Static files
-app.use("/public", express.static("public"));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Public routes
 app.get("/", (req, res) => {
