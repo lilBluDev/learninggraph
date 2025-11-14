@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import connectDB from "./konfigurasi/database.js";
 import prosesHalaman, { watchFiles } from "./konfigurasi/prosesHalaman.js";
@@ -10,6 +12,9 @@ import prosesHalaman, { watchFiles } from "./konfigurasi/prosesHalaman.js";
 import { default as APIroute } from "./api.js";
 import { redirectIfAuth, requireAuth } from "./middleware/auth.js";
 import UserRoute from "./uRoute.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
