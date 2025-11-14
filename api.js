@@ -39,22 +39,41 @@ route.post("/register", async (req, res) => {
         // Create JWT
         const token = generateToken(user._id);
 
-        // Save to session (ONLY userId)
-        req.session.userId = user._id;
-
-        req.session.save(() => {
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "lax",
-                maxAge: 1000 * 60 * 60 * 24 * 7,
+        // CRITICAL: Regenerate session to avoid fixation attacks and ensure clean state
+        await new Promise((resolve, reject) => {
+            req.session.regenerate((err) => {
+                if (err) reject(err);
+                else resolve();
             });
+        });
 
-            res.status(201).json({
-                success: true,
-                message: "Pendaftaran berhasil!",
-                data: { token, user: user.toPublicJSON() }
+        // Save userId to session
+        req.session.userId = user._id.toString();
+
+        // Save session explicitly
+        await new Promise((resolve, reject) => {
+            req.session.save((err) => {
+                if (err) {
+                    console.error('Session save error:', err);
+                    reject(err);
+                } else {
+                    console.log('Session saved successfully');
+                    resolve();
+                }
             });
+        });
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.ENV !== "DEV",
+            sameSite: process.env.ENV !== "DEV" ? "none" : "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Pendaftaran berhasil!",
+            data: { token, user: user.toPublicJSON() }
         });
 
     } catch (error) {
@@ -85,26 +104,32 @@ route.post("/login", async (req, res) => {
 
         const token = generateToken(user._id);
 
-        // Only store userId in session
-        req.session.userId = user._id;
+        // Only store userId in session (as string)
+        req.session.userId = user._id.toString();
 
-        req.session.save(() => {
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "lax",
-                maxAge: 1000 * 60 * 60 * 24 * 7,
+        // CRITICAL: Use Promise-based session save for Vercel
+        await new Promise((resolve, reject) => {
+            req.session.save((err) => {
+                if (err) reject(err);
+                else resolve();
             });
+        });
 
-            res.json({
-                success: true,
-                message: "Login berhasil!",
-                data: {
-                    token,
-                    userid: user._id,
-                    user: user.toPublicJSON()
-                }
-            });
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.ENV !== "DEV",
+            sameSite: process.env.ENV !== "DEV" ? "none" : "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+        });
+
+        res.json({
+            success: true,
+            message: "Login berhasil!",
+            data: {
+                token,
+                userid: user._id,
+                user: user.toPublicJSON()
+            }
         });
 
     } catch (error) {
@@ -115,8 +140,16 @@ route.post("/login", async (req, res) => {
 
 
 // Logout
-route.post("/logout", verifyToken, (req, res) => {
-    req.session.destroy(() => {
+route.post("/logout", verifyToken, async (req, res) => {
+    try {
+        // CRITICAL: Use Promise-based session destroy for Vercel
+        await new Promise((resolve, reject) => {
+            req.session.destroy((err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
+
         res.clearCookie("connect.sid");
         res.clearCookie("token");
 
@@ -124,7 +157,13 @@ route.post("/logout", verifyToken, (req, res) => {
             success: true,
             message: "Logout berhasil!"
         });
-    });
+    } catch (error) {
+        console.error("Logout error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Gagal logout."
+        });
+    }
 });
 
 
@@ -150,6 +189,13 @@ route.put("/profile", verifyToken, async (req, res) => {
     try {
         const { displayName, description, selectedSubjects } = req.body;
         const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User tidak ditemukan."
+            });
+        }
 
         if (displayName) user.displayName = displayName;
         if (description !== undefined) user.description = description;
@@ -178,6 +224,13 @@ route.post("/friend/add/:friendId", verifyToken, async (req, res) => {
     try {
         const user = await User.findById(req.userId);
         const friendId = req.params.friendId;
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User tidak ditemukan."
+            });
+        }
 
         if (user.friends.includes(friendId)) {
             return res.status(400).json({
@@ -211,6 +264,13 @@ route.post("/xp/add", verifyToken, async (req, res) => {
         const { amount } = req.body;
         const user = await User.findById(req.userId);
 
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User tidak ditemukan."
+            });
+        }
+
         user.addXP(amount || 10);
         await user.save();
 
@@ -230,7 +290,5 @@ route.post("/xp/add", verifyToken, async (req, res) => {
         });
     }
 });
-
-
 
 export default route;

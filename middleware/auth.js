@@ -29,6 +29,7 @@ export const verifyToken = async (req, res, next) => {
 
         next();
     } catch (error) {
+        console.error("Token verification error:", error);
         return res.status(401).json({ success: false, message: "Token tidak valid atau kadaluarsa." });
     }
 };
@@ -37,11 +38,38 @@ export const verifyToken = async (req, res, next) => {
 // ================================
 // SESSION AUTH (HTML PAGES)
 // ================================
-export const requireAuth = (req, res, next) => {
-    if (!req.session || !req.session.userId) {
-        return res.redirect("/login");
+export const requireAuth = async (req, res, next) => {
+    try {
+        console.log('=== RequireAuth Check ===');
+        console.log('Session ID:', req.sessionID);
+        console.log('Session:', req.session);
+        console.log('Cookies:', req.cookies);
+        
+        // Check session
+        if (!req.session || !req.session.userId) {
+            console.log('No session or userId found - redirecting to login');
+            return res.redirect("/login");
+        }
+
+        console.log('Found userId in session:', req.session.userId);
+
+        // Optional: Verify user still exists
+        const user = await User.findById(req.session.userId);
+        if (!user) {
+            console.log('User not found in database - destroying session');
+            req.session.destroy(() => {
+                res.redirect("/login");
+            });
+            return;
+        }
+
+        console.log('User authenticated:', user.username);
+        req.userId = req.session.userId;
+        next();
+    } catch (error) {
+        console.error("RequireAuth error:", error);
+        res.redirect("/login");
     }
-    next();
 };
 
 export const redirectIfAuth = (req, res, next) => {
@@ -56,7 +84,7 @@ export const redirectIfAuth = (req, res, next) => {
 // ================================
 export const generateToken = (userId) => {
     return jwt.sign(
-        { userId },
+        { userId: userId.toString() },
         process.env.JWT_SECRET,
         { expiresIn: "7d" }
     );
