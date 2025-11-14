@@ -66,7 +66,7 @@ route.post("/register", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.ENV !== "DEV",
-            sameSite: process.env.ENV !== "DEV" ? "none" : "lax",
+            sameSite: "lax",
             maxAge: 1000 * 60 * 60 * 24 * 7,
         });
 

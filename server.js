@@ -69,13 +69,13 @@ app.use(session(sessionConfig));
 
 // Debug middleware (remove in production)
 app.use((req, res, next) => {
-    console.log('Incoming request:', {
-        method: req.method,
-        path: req.path,
-        sessionID: req.sessionID,
-        hasSession: !!req.session,
-        cookies: req.cookies
-    });
+    // console.log('Incoming request:', {
+    //     method: req.method,
+    //     path: req.path,
+    //     sessionID: req.sessionID,
+    //     hasSession: !!req.session,
+    //     cookies: req.cookies
+    // });
     next();
 });
 
