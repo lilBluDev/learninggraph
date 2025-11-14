@@ -119,11 +119,14 @@ route.post("/login", async (req, res) => {
         req.session.userId = user._id;
         req.session.token = token;
 
+        console.log(req.session)
+
         res.json({
             success: true,
             message: "Login berhasil!",
             data: {
                 token,
+                userid: user._id,
                 user: user.toPublicJSON()
             }
         });
