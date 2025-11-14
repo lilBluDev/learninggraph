@@ -6,7 +6,7 @@ const route = Router();
 
 // Get all catatan milik user (dengan filter)
 route.get("/", verifyToken, async (req, res) => {
-    try {
+    try {        
         const { mataPelajaran, tag, search, archived } = req.query;
         
         let filter = { 
@@ -38,7 +38,7 @@ route.get("/", verifyToken, async (req, res) => {
         console.error('Get catatan error:', error);
         res.status(500).json({
             success: false,
-            message: "Gagal mengambil catatan."
+            message: "Gagal mengambil catatan: " + error.message
         });
     }
 });

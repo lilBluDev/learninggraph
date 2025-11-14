@@ -45,13 +45,16 @@ async function handleLogin(event) {
         const data = await response.json();
 
         if (data.success) {
+            console.log("success", data)
             // Simpan token ke localStorage
             localStorage.setItem('token', data.data.token);
+            console.log("token saved")
             
             // Tampilkan pesan sukses
             const successMsg = document.getElementById('loginSuccess');
             successMsg.classList.add('show');
 
+            console.log("redirecting...")
             setTimeout(() => {
                 // Redirect ke dashboard
                 window.location.href = '/u';
