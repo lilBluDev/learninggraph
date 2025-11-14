@@ -12,29 +12,20 @@ route.post("/register", async (req, res) => {
     try {
         const { username, displayName, email, password, selectedSubjects } = req.body;
 
-        // Validasi input
         if (!username || !displayName || !email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Semua field wajib diisi."
-            });
+            return res.status(400).json({ success: false, message: "Semua field wajib diisi." });
         }
 
-        // Cek apakah username atau email sudah ada
-        const existingUser = await User.findOne({
-            $or: [{ username }, { email }]
-        });
-
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
             return res.status(400).json({
                 success: false,
-                message: existingUser.username === username 
-                    ? "Username sudah digunakan." 
+                message: existingUser.username === username
+                    ? "Username sudah digunakan."
                     : "Email sudah terdaftar."
             });
         }
 
-        // Buat user baru
         const user = new User({
             username,
             displayName,
@@ -45,126 +36,97 @@ route.post("/register", async (req, res) => {
 
         await user.save();
 
-        // Generate token
+        // Create JWT
         const token = generateToken(user._id);
 
-        // Simpan ke session
+        // Save to session (ONLY userId)
         req.session.userId = user._id;
-        req.session.token = token;
 
-        res.status(201).json({
-            success: true,
-            message: "Pendaftaran berhasil!",
-            data: {
-                token,
-                user: user.toPublicJSON()
-            }
+        req.session.save(() => {
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "lax",
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+            });
+
+            res.status(201).json({
+                success: true,
+                message: "Pendaftaran berhasil!",
+                data: { token, user: user.toPublicJSON() }
+            });
         });
 
     } catch (error) {
-        console.error('Register error:', error);
-        res.status(500).json({
-            success: false,
-            message: "Terjadi kesalahan saat mendaftar.",
-            error: error.message
-        });
+        console.error("Register error:", error);
+        res.status(500).json({ success: false, message: "Terjadi kesalahan saat mendaftar." });
     }
 });
+
 
 // Login
 route.post("/login", async (req, res) => {
     try {
         const { usernameOrEmail, password } = req.body;
 
-        if (!usernameOrEmail || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Username/email dan password wajib diisi."
-            });
-        }
-
-        // Cari user berdasarkan username atau email
         const user = await User.findOne({
-            $or: [
-                { username: usernameOrEmail },
-                { email: usernameOrEmail }
-            ]
+            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }]
         });
 
-        if (!user) {
+        if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({
                 success: false,
                 message: "Username/email atau password salah."
             });
         }
 
-        // Cek password
-        const isPasswordValid = await user.comparePassword(password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({
-                success: false,
-                message: "Username/email atau password salah."
-            });
-        }
-
-        // Update last login
         user.lastLogin = new Date();
         await user.save();
 
-        // Generate token
         const token = generateToken(user._id);
 
-        // Simpan ke session
+        // Only store userId in session
         req.session.userId = user._id;
-        req.session.token = token;
 
-        console.log(req.session)
+        req.session.save(() => {
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "lax",
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+            });
+
+            res.json({
+                success: true,
+                message: "Login berhasil!",
+                data: {
+                    token,
+                    userid: user._id,
+                    user: user.toPublicJSON()
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).json({ success: false, message: "Terjadi kesalahan saat login." });
+    }
+});
+
+
+// Logout
+route.post("/logout", verifyToken, (req, res) => {
+    req.session.destroy(() => {
+        res.clearCookie("connect.sid");
+        res.clearCookie("token");
 
         res.json({
             success: true,
-            message: "Login berhasil!",
-            data: {
-                token,
-                userid: user._id,
-                user: user.toPublicJSON()
-            }
+            message: "Logout berhasil!"
         });
-
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({
-            success: false,
-            message: "Terjadi kesalahan saat login.",
-            error: error.message
-        });
-    }
+    });
 });
 
-// Logout
-route.post("/logout", verifyToken, async (req, res) => {
-    try {
-        req.session.destroy((err) => {
-            if (err) {
-                return res.status(500).json({
-                    success: false,
-                    message: "Gagal logout."
-                });
-            }
-
-            res.clearCookie('connect.sid');
-            res.json({
-                success: true,
-                message: "Logout berhasil!"
-            });
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Terjadi kesalahan saat logout."
-        });
-    }
-});
 
 // Get current user profile
 route.get("/me", verifyToken, async (req, res) => {
