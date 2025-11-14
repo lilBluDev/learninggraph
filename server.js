@@ -49,6 +49,7 @@ app.use("/api", APIroute);
 app.use("/u", requireAuth, UserRoute); // Protected route
 
 // Static files
+app.use("/public", express.static(import.meta.dirname + "/public"));
 app.get("/public/:file", (req, res) => {
     res.sendFile(import.meta.dirname + "/public/" + req.params.file);
 });
