@@ -54,7 +54,7 @@ const sessionConfig = {
     cookie: {
         httpOnly: true,
         secure: process.env.ENV !== "DEV",
-        sameSite: process.env.ENV !== "DEV" ? "none" : "lax",
+        sameSite: "lax",
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         path: '/'
     }
