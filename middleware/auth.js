@@ -40,10 +40,6 @@ export const verifyToken = async (req, res, next) => {
 // ================================
 export const requireAuth = async (req, res, next) => {
     try {
-        console.log('=== RequireAuth Check ===');
-        console.log('Session ID:', req.sessionID);
-        console.log('Session:', req.session);
-        console.log('Cookies:', req.cookies);
         
         // Check session
         if (!req.session || !req.session.userId) {
