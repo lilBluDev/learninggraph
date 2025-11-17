@@ -1,0 +1,201 @@
+/* ===== MATA PELAJARAN PAGE ===== */
+.mata-pelajaran-container {
+    min-height: calc(100vh - 200px);
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mata-pelajaran-header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: slideInDown 0.6s ease;
+}
+
+.mata-pelajaran-header h1 {
+    font-size: 42px;
+    color: #0047AB;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.mata-pelajaran-header p {
+    font-size: 16px;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search Filter */
+.search-filter {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 20px;
+    border: 2px solid #0047AB;
+    border-radius: 0;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.1);
+}
+
+/* Grid Layout */
+.mata-pelajaran-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Card Styles */
+.pelajaran-card {
+    background: white;
+    padding: 30px 20px;
+    border: 2px solid #0047AB;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pelajaran-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.pelajaran-card:hover::before {
+    left: 100%;
+}
+
+.pelajaran-card:hover {
+    border-color: #FFD700;
+    box-shadow: 0 8px 24px rgba(0, 71, 171, 0.15);
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-size: 50px;
+    color: #0047AB;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.pelajaran-card:hover .card-icon {
+    font-size: 60px;
+    color: #FFD700;
+}
+
+.pelajaran-card h3 {
+    font-size: 20px;
+    color: #0047AB;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.pelajaran-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    min-height: 42px;
+}
+
+.card-btn {
+    background: #0047AB;
+    color: #FFD700;
+    border: 2px solid #0047AB;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card-btn:hover {
+    background: #FFD700;
+    color: #0047AB;
+}
+
+.card-btn:active {
+    transform: scale(0.98);
+}
+
+/* Hidden state for search filter */
+.pelajaran-card.hidden {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mata-pelajaran-container {
+        padding: 40px 15px;
+    }
+
+    .mata-pelajaran-header h1 {
+        font-size: 32px;
+    }
+
+    .mata-pelajaran-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .card-icon {
+        font-size: 40px;
+    }
+
+    .pelajaran-card:hover .card-icon {
+        font-size: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mata-pelajaran-header h1 {
+        font-size: 24px;
+    }
+
+    .mata-pelajaran-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-box {
+        font-size: 14px;
+    }
+}

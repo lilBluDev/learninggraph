@@ -1,14 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
-}
-
 /* Header */
 header {
     background: #0047AB;
@@ -49,6 +38,27 @@ header {
 .yellow-bar {
     background: #FFD700;
     height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.btn-kembali {
+    background: white;
+    color: #0047AB;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-kembali:hover {
+    background: #f0f0f0;
+    transform: translateX(-3px);
 }
 
 /* Main Content */
@@ -75,8 +85,8 @@ header {
 }
 
 .background-logo img {
-    width: 300px;
-    height: 300px;
+    width: 750px;
+    height: 750px;
     object-fit: contain;
 }
 

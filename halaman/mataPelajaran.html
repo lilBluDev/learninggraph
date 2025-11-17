@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mata Pelajaran - LearningGraph</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/navbar.css"/>
+    <link rel="stylesheet" href="/public/mataPelajaran.css"/>
+    <link rel="stylesheet" href="/public/footer.css"/>
+</head>
+<body>
+    <komponen navbar />
+
+    <div class="mata-pelajaran-container">
+        <div class="mata-pelajaran-header">
+            <h1>Pilih Mata Pelajaran</h1>
+            <p>Pelajari berbagai mata pelajaran dengan cara yang menyenangkan dan interaktif</p>
+        </div>
+
+        <div class="search-filter">
+            <input type="text" id="searchInput" placeholder="Cari mata pelajaran..." class="search-box">
+        </div>
+
+        <div class="mata-pelajaran-grid">
+            <div class="pelajaran-card" data-kategori="ipa">
+                <div class="card-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>Kimia</h3>
+                <p>Pelajari tentang unsur, reaksi, dan sifat-sifat kimia</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ipa">
+                <div class="card-icon">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <h3>Biologi</h3>
+                <p>Jelajahi dunia makhluk hidup dan ekosistem</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ipa">
+                <div class="card-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Fisika</h3>
+                <p>Pahami konsep gerakan, energi, dan gaya</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ipa">
+                <div class="card-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Matematika</h3>
+                <p>Kuasai aljabar, geometri, dan kalkulus</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ips">
+                <div class="card-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>Geografi</h3>
+                <p>Pelajari tentang bumi, iklim, dan wilayah</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ips">
+                <div class="card-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h3>Sejarah</h3>
+                <p>Jelajahi peradaban dan peristiwa bersejarah</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ips">
+                <div class="card-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Sosiologi</h3>
+                <p>Pahami interaksi sosial dan masyarakat</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="ips">
+                <div class="card-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <h3>Ekonomi</h3>
+                <p>Pelajari sistem ekonomi dan perdagangan</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="bahasa">
+                <div class="card-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>Bahasa Indonesia</h3>
+                <p>Kuasai sastra, tata bahasa, dan komunikasi</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+
+            <div class="pelajaran-card" data-kategori="bahasa">
+                <div class="card-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h3>Bahasa Inggris</h3>
+                <p>Tingkatkan kemampuan berbahasa Inggris Anda</p>
+                <button class="card-btn">Mulai Belajar</button>
+            </div>
+        </div>
+    </div>
+
+    <komponen footer />
+
+    <script src="/public/mataPelajaran.js"></script>
+</body>
+</html>

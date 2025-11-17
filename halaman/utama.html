@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearningGraph - Homepage</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
     <link rel="stylesheet" href="/public/navbar.css"/>
     <link rel="stylesheet" href="/public/footer.css"/>
     <link rel="stylesheet" href="/public/utama.css"/>
@@ -39,67 +40,27 @@
     <div class="yellow-bar"></div>
 
     <!-- Leaderboard Section -->
-    <section class="leaderboard-section">
-        <h2 class="section-title">LEADERBOARD NASIONAL UPDATE</h2>
-        <div class="leaderboard-container">
-            <div class="podium-container">
-                <!-- Silver -->
-                <div class="podium-item silver">
-                    <div class="avatar"></div>
-                    <div class="medal">2</div>
-                    <div class="podium"></div>
-                </div>
-                <!-- Gold -->
-                <div class="podium-item gold">
-                    <div class="avatar"></div>
-                    <div class="medal">1</div>
-                    <div class="podium"></div>
-                </div>
-                <!-- Bronze -->
-                <div class="podium-item bronze">
-                    <div class="avatar"></div>
-                    <div class="medal">3</div>
-                    <div class="podium"></div>
-                </div>
+        <section class="leaderboard-section">
+            <h2 class="section-title">LEADERBOARD NASIONAL UPDATE</h2>
+            <div class="leaderboard-filter" style="margin-bottom:24px;text-align:center;">
+                <button data-cat="SMA" class="active">SMA</button>
+                <button data-cat="SMP">SMP</button>
+                <button data-cat="SD">SD</button>
+                <button data-cat="TK">TK</button>
             </div>
 
-            <div class="rankings-list">
-                <h3>Top Rankings</h3>
-                <div class="rank-item">
-                    <div class="rank-number">4</div>
-                    <div class="rank-avatar"></div>
-                    <div class="rank-info">
-                        <div class="rank-name">Student Name</div>
-                        <div class="rank-score">Score: 9500</div>
-                    </div>
+            <div class="leaderboard-row">
+                <div id="podiumContainer" class="podium-container">
+                    <!-- Top-3 slots will be injected here -->
                 </div>
-                <div class="rank-item">
-                    <div class="rank-number">5</div>
-                    <div class="rank-avatar"></div>
-                    <div class="rank-info">
-                        <div class="rank-name">Student Name</div>
-                        <div class="rank-score">Score: 9300</div>
-                    </div>
-                </div>
-                <div class="rank-item">
-                    <div class="rank-number">6</div>
-                    <div class="rank-avatar"></div>
-                    <div class="rank-info">
-                        <div class="rank-name">Student Name</div>
-                        <div class="rank-score">Score: 9100</div>
-                    </div>
-                </div>
-                <div class="rank-item">
-                    <div class="rank-number">7</div>
-                    <div class="rank-avatar"></div>
-                    <div class="rank-info">
-                        <div class="rank-name">Student Name</div>
-                        <div class="rank-score">Score: 8900</div>
-                    </div>
+
+                <div id="leaderboardList" class="leaderboard-list-right">
+                    <!-- Ranks 4..n will be injected here -->
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <script src="/public/utamaLeaderboard.js"></script>
 
     <!-- Mata Pelajaran Section -->
     <section class="subjects-section">
@@ -197,7 +158,7 @@
     <section class="partner-section">
         <div class="partner-content">
             <div class="partner-image">
-                <img src="https://via.placeholder.com/400x300/3498db/ffffff?text=Partnership+Illustration"
+                <img src="/public/partner.png"
                     alt="Partner">
             </div>
             <h2>MEET YOUR PARTNER</h2>

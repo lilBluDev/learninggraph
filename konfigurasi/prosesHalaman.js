@@ -8,8 +8,12 @@ const regex = /<\/?komponen\s+([^>\s]+)\s*\/?>/g;
 
 let komponenCache = new Map();
 let halamanCache = new Map();
+let fileWatcherActive = false;
 
 export function watchFiles() {
+    if (fileWatcherActive) return; // Prevent duplicate watchers
+    fileWatcherActive = true;
+    
     // Watch komponen folder
     fs.watch(dirKomponen, (event, filename) => {
         if (filename && filename.endsWith(".html")) {
@@ -88,7 +92,11 @@ export default function prosesHalaman(halaman) {
         data = data.replaceAll(re, komponenData);
     }
 
-    data = injectIntoHead(data, '<link rel="icon" href="/public/lglogo.png">')
+    data = injectIntoHead(data, [
+        '<link rel="icon" href="/public/lglogo.png">',
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+        '<meta charset="UTF-8">'
+    ])
 
     halamanCache.set(halaman, data);
     return data;

@@ -1,4 +1,5 @@
 import { Redis } from "@upstash/redis";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
@@ -19,6 +20,12 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Performance: Enable compression early
+const compressionMiddleware = compression({
+    threshold: 1024, // Only compress responses > 1KB
+    level: 6, // Balance between compression ratio and speed
+});
+
 // ----------------------------------------------------
 // 1. Connect Mongo (works fine on Vercel serverless)
 // ----------------------------------------------------
@@ -38,9 +45,12 @@ const sessionStore = new UpstashStore({ client: redis })
 // ----------------------------------------------------
 const app = express();
 
+// Performance: Apply compression middleware first
+app.use(compressionMiddleware);
+
 // Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // ----------------------------------------------------
@@ -81,18 +91,53 @@ app.use((req, res, next) => {
 });
 
 // Static files
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "public"), {
+    maxAge: "1d", // Cache static files for 1 day
+    etag: false, // Disable ETag for performance
+    lastModified: false
+}));
 
 // App routes
 app.use("/api", APIroute);
 app.use("/u", requireAuth, UserRoute);
 
-app.get("/", (req, res) => {
+// Cache control middleware for public pages
+const setCacheHeaders = (req, res, next) => {
+    res.setHeader("Cache-Control", "public, max-age=300"); // 5 minutes cache
+    next();
+};
+
+app.get("/", setCacheHeaders, (req, res) => {
     res.send(prosesHalaman("utama"));
 });
 
+app.get("/matapelajaran", setCacheHeaders, (req, res) => {
+    res.send(prosesHalaman("mataPelajaran"));
+});
+
+app.get("/leaderboard", setCacheHeaders, (req, res) => {
+    res.send(prosesHalaman("leaderboard"));
+});
+
+app.get("/ulasan", setCacheHeaders, (req, res) => {
+    res.send(prosesHalaman("ulasan"));
+});
+
+app.get("/kontak", setCacheHeaders, (req, res) => {
+    res.send(prosesHalaman("kontak"));
+});
+
 app.get("/daftarlogin", redirectIfAuth, (req, res) => {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.send(prosesHalaman("daftarlogin"));
+});
+
+app.get("/login", redirectIfAuth, (req, res) => {
+    res.redirect("/daftarlogin");
+});
+
+app.get("/daftar", redirectIfAuth, (req, res) => {
+    res.redirect("/daftarlogin");
 });
 
 // 500 Error handler

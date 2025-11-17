@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulasan - LearningGraph</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/navbar.css"/>
+    <link rel="stylesheet" href="/public/ulasan.css"/>
+    <link rel="stylesheet" href="/public/footer.css"/>
+</head>
+<body>
+    <komponen navbar />
+
+    <main class="ulasan-main">
+        <!-- Hero Section -->
+        <section class="ulasan-hero">
+            <h1>Ulasan dari Pengguna</h1>
+            <p>Baca pengalaman dan testimoni dari pengguna LearningGraph di seluruh Indonesia</p>
+        </section>
+
+        <!-- Review Filter -->
+        <section class="ulasan-section">
+            <div class="ulasan-filter" style="margin-bottom: 40px; text-align: center;">
+                <button class="filter-btn active" data-filter="semua">Semua</button>
+                <button class="filter-btn" data-filter="5">⭐⭐⭐⭐⭐ (5 Bintang)</button>
+                <button class="filter-btn" data-filter="4">⭐⭐⭐⭐ (4 Bintang)</button>
+                <button class="filter-btn" data-filter="3">⭐⭐⭐ (3 Bintang)</button>
+            </div>
+
+            <!-- Reviews Container -->
+            <div id="reviewsContainer" class="reviews-grid">
+                <!-- Reviews will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Rating Summary -->
+        <section class="rating-summary">
+            <h2>Ringkasan Rating</h2>
+            <div class="rating-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Rating Rata-rata</span>
+                    <span class="stat-value" id="avgRating">4.5</span>
+                    <span class="stat-unit">/5.0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Ulasan</span>
+                    <span class="stat-value" id="totalReviews">24</span>
+                    <span class="stat-unit">ulasan</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Kepuasan Pengguna</span>
+                    <span class="stat-value" id="satisfaction">92%</span>
+                    <span class="stat-unit">puas</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Review Section -->
+        <section class="add-review-section">
+            <h2>Berikan Ulasan Anda</h2>
+            <form id="reviewForm" class="review-form">
+                <div class="form-group">
+                    <label for="reviewName">Nama Lengkap</label>
+                    <input type="text" id="reviewName" name="name" placeholder="Masukkan nama Anda" required>
+                </div>
+                <div class="form-group">
+                    <label for="reviewEmail">Email</label>
+                    <input type="email" id="reviewEmail" name="email" placeholder="Masukkan email Anda" required>
+                </div>
+                <div class="form-group">
+                    <label>Rating</label>
+                    <div class="star-rating" id="starRating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" id="ratingValue" name="rating" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="reviewText">Ulasan Anda</label>
+                    <textarea id="reviewText" name="review" placeholder="Bagikan pengalaman Anda menggunakan LearningGraph..." rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Kirim Ulasan</button>
+            </form>
+        </section>
+    </main>
+
+    <komponen footer />
+
+    <script src="/public/ulasan.js"></script>
+</body>
+</html>
