@@ -1,9 +1,18 @@
+// Toggle between login and signup forms
+function toggleForms() {
+    const signupForm = document.getElementById('signupForm');
+    const loginForm = document.getElementById('loginForm');
+
+    signupForm.classList.toggle('hidden');
+    loginForm.classList.toggle('hidden');
+}
+
 // Toggle password visibility
 function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
     const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
     input.setAttribute('type', type);
-    
+
     // Update icon
     const svg = button.querySelector('svg');
     if (type === 'text') {
@@ -15,7 +24,6 @@ function togglePassword(inputId, button) {
 
 // Show error message
 function showError(message) {
-    // Create or update error element
     let errorDiv = document.querySelector('.error-message');
     if (!errorDiv) {
         errorDiv = document.createElement('div');
@@ -25,8 +33,7 @@ function showError(message) {
     }
     errorDiv.textContent = message;
     errorDiv.style.display = 'block';
-    
-    // Hide after 5 seconds
+
     setTimeout(() => {
         errorDiv.style.display = 'none';
     }, 5000);
@@ -38,8 +45,7 @@ function showSuccess(elementId, message) {
     if (successDiv) {
         successDiv.textContent = message;
         successDiv.style.display = 'block';
-        
-        // Hide after 3 seconds
+
         setTimeout(() => {
             successDiv.style.display = 'none';
         }, 3000);
@@ -49,31 +55,31 @@ function showSuccess(elementId, message) {
 // Handle Register
 async function handleRegister(event) {
     event.preventDefault();
-    
+
     const name = document.getElementById('registerName').value.trim();
     const email = document.getElementById('registerEmail').value.trim();
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    
+
     // Validate
     if (password !== confirmPassword) {
         showError('Password tidak cocok!');
         return;
     }
-    
+
     if (password.length < 6) {
         showError('Password minimal 6 karakter!');
         return;
     }
-    
+
     // Generate username from email
     const username = email.split('@')[0].toLowerCase();
-    
+
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Mendaftar...';
-    
+
     try {
         const response = await fetch('/api/register', {
             method: 'POST',
@@ -89,18 +95,16 @@ async function handleRegister(event) {
                 selectedSubjects: []
             })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             showSuccess('registerSuccess', data.message || 'Pendaftaran berhasil!');
-            
-            // Store token in localStorage (optional)
+
             if (data.data?.token) {
                 localStorage.setItem('token', data.data.token);
             }
-            
-            // Redirect to dashboard after 1 second
+
             setTimeout(() => {
                 window.location.href = '/u';
             }, 1000);
@@ -120,20 +124,20 @@ async function handleRegister(event) {
 // Handle Login
 async function handleLogin(event) {
     event.preventDefault();
-    
+
     const usernameOrEmail = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
-    
+
     if (!usernameOrEmail || !password) {
         showError('Semua field harus diisi!');
         return;
     }
-    
+
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Masuk...';
-    
+
     try {
         const response = await fetch('/api/login', {
             method: 'POST',
@@ -146,18 +150,16 @@ async function handleLogin(event) {
                 password: password
             })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             showSuccess('loginSuccess', data.message || 'Login berhasil!');
-            
-            // Store token in localStorage (optional)
+
             if (data.data?.token) {
                 localStorage.setItem('token', data.data.token);
             }
-            
-            // Redirect to dashboard after 1 second
+
             setTimeout(() => {
                 window.location.href = '/u';
             }, 1000);
@@ -173,8 +175,3 @@ async function handleLogin(event) {
         submitBtn.textContent = originalText;
     }
 }
-
-// Make functions available globally
-window.togglePassword = togglePassword;
-window.handleRegister = handleRegister;
-window.handleLogin = handleLogin;

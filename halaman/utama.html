@@ -1,89 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearningGraph</title>
-    <link rel="stylesheet" href="/public/global.css"/>
+    <title>LearningGraph - Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/navbar.css"/>
+    <link rel="stylesheet" href="/public/footer.css"/>
     <link rel="stylesheet" href="/public/utama.css"/>
-    <link rel="stylesheet" href="/public/lpnavbar.css"/>
 </head>
+
 <body>
-    <komponen lpnavbar />
+    <komponen navbar />
+
     
-    <section class="hero">  
-        <div class="hero-content">
-            <h1>Bangun Masa Depan Bersama LearningGraph</h1>
-            <p>Platform pembelajaran interaktif yang membantu siswa berkembang melalui kolaborasi, kompetisi sehat, dan materi pembelajaran yang menarik.</p>
-            <button class="cta-button" onclick="document.querySelector('.features').scrollIntoView({behavior: 'smooth'})">
-                Mulai Belajar Sekarang →
-            </button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-content">
+            <h2>WELCOME TO LEARNING OPPORTUNITY GRAPH (LG)</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+            <a href="#" class="btn-yellow">SELENGKAPNYA</a>
+        </div>
+        <div class="welcome-image">
+            <img src="/public/lglogo.png" alt="Welcome">
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <h2 class="section-title">Fitur Unggulan Kami</h2>
-        <div class="features-grid">
-            <div class="feature-card green">
-                <div class="feature-icon">📝</div>
-                <h3>Catatan & Pencarian Materi</h3>
-                <p>Buat catatan pembelajaran dan temukan materi dengan mudah. Sistem pencarian canggih membantu siswa meningkatkan kinerja belajar mereka.</p>
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section">
+        <h2 class="section-title">LEADERBOARD NASIONAL UPDATE</h2>
+        <div class="leaderboard-container">
+            <div class="podium-container">
+                <!-- Silver -->
+                <div class="podium-item silver">
+                    <div class="avatar"></div>
+                    <div class="medal">2</div>
+                    <div class="podium"></div>
+                </div>
+                <!-- Gold -->
+                <div class="podium-item gold">
+                    <div class="avatar"></div>
+                    <div class="medal">1</div>
+                    <div class="podium"></div>
+                </div>
+                <!-- Bronze -->
+                <div class="podium-item bronze">
+                    <div class="avatar"></div>
+                    <div class="medal">3</div>
+                    <div class="podium"></div>
+                </div>
             </div>
 
-            <div class="feature-card blue">
-                <div class="feature-icon">💡</div>
-                <h3>Soal Berdasarkan Mapel & Kemampuan</h3>
-                <p>Latihan soal yang disesuaikan dengan mata pelajaran dan tingkat kemampuan. UI interaktif membuat belajar menjadi lebih seru dan efektif.</p>
-            </div>
-
-            <div class="feature-card gray">
-                <div class="feature-icon">🤝</div>
-                <h3>Pertemanan & Kolaborasi</h3>
-                <p>Berteman dan berkolaborasi dengan siswa lain. Tingkatkan nilai sosial sambil membangun koneksi yang bermakna.</p>
-            </div>
-
-            <div class="feature-card red">
-                <div class="feature-icon">🏆</div>
-                <h3>Kompetisi & Rangking</h3>
-                <p>Berlomba secara sehat menjawab kuis dengan cepat dan akurat. Raih nilai tinggi dan bersaing di papan peringkat global.</p>
-            </div>
-
-            <div class="feature-card yellow">
-                <div class="feature-icon">📅</div>
-                <h3>Manajemen Kalender & Lomba</h3>
-                <p>Kelola jadwal belajar dan ikuti lomba yang dipersonalisasi sesuai kemampuan. Visualisasi jadwal yang jelas dan terorganisir.</p>
+            <div class="rankings-list">
+                <h3>Top Rankings</h3>
+                <div class="rank-item">
+                    <div class="rank-number">4</div>
+                    <div class="rank-avatar"></div>
+                    <div class="rank-info">
+                        <div class="rank-name">Student Name</div>
+                        <div class="rank-score">Score: 9500</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">5</div>
+                    <div class="rank-avatar"></div>
+                    <div class="rank-info">
+                        <div class="rank-name">Student Name</div>
+                        <div class="rank-score">Score: 9300</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">6</div>
+                    <div class="rank-avatar"></div>
+                    <div class="rank-info">
+                        <div class="rank-name">Student Name</div>
+                        <div class="rank-score">Score: 9100</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">7</div>
+                    <div class="rank-avatar"></div>
+                    <div class="rank-info">
+                        <div class="rank-name">Student Name</div>
+                        <div class="rank-score">Score: 8900</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <h2 class="section-title" style="color: white;">Platform Terpercaya</h2>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h2>10K+</h2>
-                <p>Siswa Aktif</p>
+    <!-- Mata Pelajaran Section -->
+    <section class="subjects-section">
+        <div class="subjects-container">
+            <div class="subjects-grid">
+                <h3>MATA PELAJARAN</h3>
+                <div class="grid">
+                    <div class="subject-card">
+                        <div class="subject-icon">📚</div>
+                        <div class="subject-name">Matematika</div>
+                        <div class="subject-class">Kelas 7-9</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🔬</div>
+                        <div class="subject-name">IPA</div>
+                        <div class="subject-class">Kelas 7-9</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🌍</div>
+                        <div class="subject-name">IPS</div>
+                        <div class="subject-class">Kelas 7-9</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🇬🇧</div>
+                        <div class="subject-name">B. Inggris</div>
+                        <div class="subject-class">Kelas 7-9</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">📖</div>
+                        <div class="subject-name">B. Indonesia</div>
+                        <div class="subject-class">Kelas 7-9</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">⚛️</div>
+                        <div class="subject-name">Fisika</div>
+                        <div class="subject-class">Kelas 10-12</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🧪</div>
+                        <div class="subject-name">Kimia</div>
+                        <div class="subject-class">Kelas 10-12</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🧬</div>
+                        <div class="subject-name">Biologi</div>
+                        <div class="subject-class">Kelas 10-12</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">💻</div>
+                        <div class="subject-name">TIK</div>
+                        <div class="subject-class">Kelas 7-12</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">🎨</div>
+                        <div class="subject-name">Seni Budaya</div>
+                        <div class="subject-class">Kelas 7-12</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">⚽</div>
+                        <div class="subject-name">Penjaskes</div>
+                        <div class="subject-class">Kelas 7-12</div>
+                    </div>
+                    <div class="subject-card">
+                        <div class="subject-icon">📜</div>
+                        <div class="subject-name">Sejarah</div>
+                        <div class="subject-class">Kelas 10-12</div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-item">
-                <h2>500+</h2>
-                <p>Materi Pembelajaran</p>
+
+        </div>
+    </section>
+
+    <section class="subjects-section">
+        <div class="sidebar-info">
+            <div class="info-lomba">
+                <h3>INFO LOMBA</h3>
+                <div class="lomba-cards">
+                    <div class="lomba-card">
+                        <img src="/public/poster1.jpg" alt="Lomba 1">
+                    </div>
+                    <div class="lomba-card">
+                        <img src="/public/poster2.jpg" alt="Lomba 2">
+                    </div>
+                    <div class="lomba-card">
+                        <img src="/public/poster3.jpg" alt="Lomba 3">
+                    </div>
+                </div>
+                <a href="#" class="btn-red">SELENGKAPNYA</a>
             </div>
-            <div class="stat-item">
-                <h2>1000+</h2>
-                <p>Soal Latihan</p>
+        </div>
+    </section>
+
+    <!-- Meet Your Partner Section -->
+    <section class="partner-section">
+        <div class="partner-content">
+            <div class="partner-image">
+                <img src="https://via.placeholder.com/400x300/3498db/ffffff?text=Partnership+Illustration"
+                    alt="Partner">
             </div>
-            <div class="stat-item">
-                <h2>95%</h2>
-                <p>Tingkat Kepuasan</p>
-            </div>
+            <h2>MEET YOUR PARTNER</h2>
+            <a href="#" class="btn-red">SELENGKAPNYA</a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 LearningGraph. Asisten membantu untuk membangun masa depan!</p>
-        <p>Platform pembelajaran interaktif untuk generasi masa depan.</p>
-    </footer>
+    <komponen footer />
 </body>
+
 </html>

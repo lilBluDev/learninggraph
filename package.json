@@ -16,7 +16,6 @@
   "dependencies": {
     "@upstash/redis": "^1.35.6",
     "bcryptjs": "^3.0.3",
-    "body": "^5.1.0",
     "body-parser": "^2.2.0",
     "connect-mongo": "^5.1.0",
     "connect-redis": "^9.0.0",
@@ -25,8 +24,7 @@
     "express-session": "^1.18.2",
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.3",
-    "parser": "^0.1.4"
+    "mongoose": "^8.19.3"
   },
   "devDependencies": {
     "dotenv": "^17.2.3",

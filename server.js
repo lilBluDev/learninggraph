@@ -7,7 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import connectDB from "./konfigurasi/database.js";
-import prosesHalaman from "./konfigurasi/prosesHalaman.js";
+import prosesHalaman, { watchFiles } from "./konfigurasi/prosesHalaman.js";
 
 import { default as APIroute } from "./api.js";
 import UpstashStore from "./konfigurasi/UpstashStore.js";
@@ -23,6 +23,7 @@ const __dirname = path.dirname(__filename);
 // 1. Connect Mongo (works fine on Vercel serverless)
 // ----------------------------------------------------
 connectDB();
+watchFiles();
 
 // ----------------------------------------------------
 // 2. Initialize Redis Session Store (REQUIRED FOR VERCEL)
@@ -90,12 +91,8 @@ app.get("/", (req, res) => {
     res.send(prosesHalaman("utama"));
 });
 
-app.get("/login", redirectIfAuth, (req, res) => {
-    res.send(prosesHalaman("login"));
-});
-
-app.get("/daftar", redirectIfAuth, (req, res) => {
-    res.send(prosesHalaman("daftar"));
+app.get("/daftarlogin", redirectIfAuth, (req, res) => {
+    res.send(prosesHalaman("daftarlogin"));
 });
 
 // 500 Error handler
