@@ -92,11 +92,44 @@ export default function prosesHalaman(halaman) {
         data = data.replaceAll(re, komponenData);
     }
 
+    // Base injections (favicon + meta)
     data = injectIntoHead(data, [
         '<link rel="icon" href="/public/lglogo.png">',
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         '<meta charset="UTF-8">'
     ])
+
+    // If serving the dashboard, inline its critical CSS to ensure styles
+    // load even when static files are not reachable or cached incorrectly.
+    // try {
+    //     if (halaman === 'dashboard') {
+    //         const dashboardCssPath = path.join(__dirname, '../public/dashboard.css');
+    //         if (fs.existsSync(dashboardCssPath)) {
+    //             const cssContent = fs.readFileSync(dashboardCssPath, 'utf8');
+    //             const styleTag = `<style id="inline-dashboard-css">\n${cssContent}\n</style>`;
+    //             data = injectIntoHead(data, styleTag);
+    //         }
+    //     }
+    // } catch (err) {
+    //     console.error('Gagal meng-inline dashboard CSS:', err.message);
+    // }
+
+    // Fallback: inline navbar CSS on all pages so the navbar styles appear
+    // even if static file serving fails or requests are routed differently.
+    try {
+        if (["utama", "daftarlogin", "panduan", "kontak"].includes(halaman)) {
+            const navbarCssPath = path.join(__dirname, '../public/navbar.css');
+            if (fs.existsSync(navbarCssPath)) {
+                const navbarCss = fs.readFileSync(navbarCssPath, 'utf8');
+                const navbarStyleTag = `<style id="inline-navbar-css">\n${navbarCss}\n</style>`;
+                data = injectIntoHead(data, navbarStyleTag);
+            }
+        }
+    } catch (err) {
+        console.error('Gagal meng-inline navbar CSS:', err.message);
+    }
+
+    console.log(data);
 
     halamanCache.set(halaman, data);
     return data;

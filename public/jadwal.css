@@ -1,0 +1,47 @@
+/* Jadwal page styles */
+body {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.main-content { 
+    margin-left: 260px !important; 
+    padding: 26px !important;
+    transition: margin-left 0.3s ease !important;
+    flex: 1 !important;
+    width: calc(100% - 260px) !important;
+}
+
+body .sidebar.collapsed ~ .main-content {
+    margin-left: 70px !important;
+    width: calc(100% - 70px) !important;
+}
+
+.header h1 { margin-bottom: 6px; }
+
+.schedule-container { margin-top: 16px; }
+
+.schedule-item { 
+    background: #fff; 
+    padding: 12px; 
+    margin-bottom: 8px; 
+    border-radius: 8px; 
+    border-left: 4px solid #667eea; 
+}
+
+.schedule-time { 
+    font-weight: 600; 
+    color: #667eea; 
+}
+
+.schedule-desc { 
+    color: #666; 
+    font-size: 13px; 
+}
+
+@media (max-width:900px) { 
+    .main-content { 
+        margin-left: 70px; 
+        padding: 16px; 
+    } 
+}

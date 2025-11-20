@@ -1,0 +1,73 @@
+/* Lomba page styles */
+body {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.main-content { 
+    margin-left: 260px !important; 
+    padding: 26px !important;
+    transition: margin-left 0.3s ease !important;
+    flex: 1 !important;
+    width: calc(100% - 260px) !important;
+}
+
+body .sidebar.collapsed ~ .main-content {
+    margin-left: 70px !important;
+    width: calc(100% - 70px) !important;
+}
+
+.header h1 { margin-bottom: 6px; }
+
+.filter-section { 
+    display: flex; 
+    gap: 8px; 
+    margin-top: 14px; 
+    flex-wrap: wrap; 
+}
+
+.filter-btn { 
+    padding: 6px 12px; 
+    border: 1px solid #ddd; 
+    background: #fff; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-size: 12px; 
+    transition: all 0.2s; 
+}
+
+.filter-btn.active { 
+    background: #667eea; 
+    color: #fff; 
+    border-color: #667eea; 
+}
+
+.competitions-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+    gap: 14px; 
+    margin-top: 12px; 
+}
+
+.competition-card { 
+    background: #fff; 
+    padding: 14px; 
+    border-radius: 10px; 
+    box-shadow: 0 6px 18px rgba(12,20,40,0.04); 
+}
+
+.competition-card .status { 
+    display: inline-block; 
+    padding: 2px 8px; 
+    background: #e8f0fe; 
+    color: #667eea; 
+    border-radius: 4px; 
+    font-size: 11px; 
+}
+
+@media (max-width:900px) { 
+    .main-content { 
+        margin-left: 70px; 
+        padding: 16px; 
+    } 
+}

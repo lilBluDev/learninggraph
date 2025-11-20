@@ -1,257 +1,238 @@
-/* ===== SIDEBAR STYLES ===== */
 .sidebar {
     position: fixed;
     left: 0;
     top: 0;
-    width: 280px;
     height: 100vh;
-    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    width: 260px;
+    background-color: #ffffff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease;
     z-index: 1000;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    overflow: hidden;
 }
 
 .sidebar.collapsed {
-    transform: translateX(-100%);
+    width: 70px;
 }
 
-/* Account Section */
-.account-section {
-    padding: 30px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.account-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-}
-
-.account-avatar {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-}
-
-.account-details {
-    flex: 1;
-    min-width: 0;
-}
-
-.account-name {
-    color: white;
-    font-weight: 700;
-    font-size: 16px;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.account-email {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.logout-btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.logout-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
-}
-
-/* Menu List */
-.menu-list {
-    list-style: none;
-    padding: 20px 0;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 16px 25px;
-    color: rgba(255, 255, 255, 0.9);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 4px 10px;
-    border-radius: 12px;
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: white;
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-}
-
-.menu-item:hover::before,
-.menu-item.active::before {
-    transform: scaleY(1);
-}
-
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-    transform: translateX(5px);
-}
-
-.menu-item.active {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-weight: 600;
-}
-
-.menu-item i {
-    font-size: 20px;
-    width: 24px;
-    text-align: center;
-}
-
-.menu-item span {
-    font-size: 15px;
-    font-weight: 500;
-}
-
-/* Toggle Button */
-.toggle-btn {
+.sidebar-toggle {
     position: fixed;
-    left: 290px;
+    left: 270px;
     top: 20px;
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: white;
+    border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
+    font-size: 16px;
+    border-radius: 50%;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-btn:hover {
+.sidebar-toggle:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
 }
 
-.sidebar.collapsed ~ .toggle-btn {
+.sidebar.collapsed .sidebar-toggle {
     left: 20px;
 }
 
-.toggle-btn i {
-    font-size: 20px;
-    transition: transform 0.3s ease;
-}
-
-.sidebar.collapsed ~ .toggle-btn i {
+.sidebar.collapsed .sidebar-toggle i {
     transform: rotate(180deg);
 }
 
-/* Responsive */
+.sidebar.collapsed .sidebar-toggle i {
+    transform: rotate(180deg);
+}
+
+.sidebar-top {
+    padding: 20px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.user-info {
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .user-info {
+    opacity: 0;
+    width: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.user-username {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #999;
+    white-space: nowrap;
+}
+
+.sidebar-nav {
+    padding: 20px 0;
+    height: calc(100vh - 280px);
+    overflow-y: auto;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav li {
+    width: 100%;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    gap: 15px;
+}
+
+.sidebar-nav a:hover {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.sidebar-nav i {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.sidebar-nav span {
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+
+.sidebar.collapsed .sidebar-nav a {
+    justify-content: center;
+    padding: 12px 0;
+    gap: 0;
+}
+
+.sidebar.collapsed .sidebar-nav span {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 15px;
+    border-top: 1px solid #e0e0e0;
+    background: white;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.btn:last-child {
+    margin-bottom: 0;
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.btn.ghost {
+    background-color: transparent;
+    color: #d97706;
+    border: 1px solid #f59e0b;
+}
+
+.btn.ghost:hover {
+    background-color: #fef3c7;
+    color: #b45309;
+    border-color: #d97706;
+}
+
+.sidebar.collapsed .btn span {
+    display: none;
+}
+
+.sidebar.collapsed .btn {
+    padding: 10px;
+}
+
+.main-content {
+    margin-left: 260px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+}
+
+.sidebar.collapsed~.main-content {
+    margin-left: 70px;
+}
+
 @media (max-width: 768px) {
     .sidebar {
-        width: 260px;
         transform: translateX(-100%);
     }
-    
+
     .sidebar.mobile-open {
         transform: translateX(0);
     }
-    
-    .toggle-btn {
-        left: 20px;
-    }
-    
-    .sidebar.mobile-open ~ .toggle-btn {
-        left: 270px;
-    }
-    
-    .menu-item {
-        padding: 14px 20px;
-    }
-}
 
-@media (max-width: 480px) {
-    .sidebar {
-        width: 240px;
-    }
-    
-    .account-section {
-        padding: 20px 15px;
-    }
-    
-    .account-avatar {
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-    }
-    
-    .account-name {
-        font-size: 15px;
-    }
-    
-    .menu-item {
-        padding: 12px 18px;
-        margin: 3px 8px;
-    }
-    
-    .menu-item i {
-        font-size: 18px;
-    }
-    
-    .menu-item span {
-        font-size: 14px;
+    .main-content {
+        margin-left: 0;
     }
 }

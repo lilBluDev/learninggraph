@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearningGraph - Jadwal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/sidebar.css"/>
+    <link rel="stylesheet" href="/public/jadwal.css"/>
+</head>
+<body>
+    <komponen sidebar />
+
+    <main class="main-content">
+        <section class="header">
+            <h1><i class="fas fa-calendar-alt"></i> Jadwal</h1>
+            <p class="muted">Atur jadwal belajar dan aktivitas kamu</p>
+            <button class="btn btn-primary" onclick="showAddScheduleModal()"><i class="fas fa-plus"></i> Tambah Jadwal</button>
+            <div class="schedule-container" id="scheduleContainer"></div>
+        </section>
+    </main>
+
+    <script src="/public/sidebar.js"></script>
+    <script src="/public/jadwal.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+/* Games page styles */
+body {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.main-content { 
+    margin-left: 260px !important; 
+    padding: 26px !important;
+    transition: margin-left 0.3s ease !important;
+    flex: 1 !important;
+    width: calc(100% - 260px) !important;
+}
+
+body .sidebar.collapsed ~ .main-content {
+    margin-left: 70px !important;
+    width: calc(100% - 70px) !important;
+}
+
+.header h1 { margin-bottom: 6px; }
+
+.games-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 14px; 
+    margin-top: 12px; 
+}
+
+.game-card { 
+    background: #fff; 
+    padding: 14px; 
+    border-radius: 10px; 
+    box-shadow: 0 6px 18px rgba(12,20,40,0.04); 
+    text-align: center; 
+}
+
+.game-card i { 
+    font-size: 24px; 
+    color: #667eea; 
+    margin-bottom: 8px; 
+}
+
+@media (max-width:900px) { 
+    .main-content { 
+        margin-left: 70px; 
+        padding: 16px; 
+    } 
+}

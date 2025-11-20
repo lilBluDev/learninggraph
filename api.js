@@ -1,11 +1,15 @@
+import { del, put } from '@vercel/blob';
 import { Router } from "express";
+import formidable from 'formidable';
 import catatanRoute from "./apiCatatan.js";
+import postRoute from './apiPost.js';
 import { generateToken, verifyToken } from "./middleware/auth.js";
 import User from "./skema/user.js";
 
 const route = Router();
 
 route.use("/catatan", catatanRoute);
+route.use('/posts', postRoute);
 
 // Register
 route.post("/register", async (req, res) => {
@@ -151,21 +155,51 @@ route.post("/logout", verifyToken, async (req, res) => {
         });
 
         res.clearCookie("connect.sid");
-        res.clearCookie("token");
-
-        res.json({
-            success: true,
-            message: "Logout berhasil!"
-        });
+        res.json({ success: true, message: "Logout berhasil!" });
     } catch (error) {
         console.error("Logout error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Gagal logout."
-        });
+        res.status(500).json({ success: false, message: "Terjadi kesalahan saat logout." });
     }
 });
 
+// Get current user data
+route.get("/user", verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId)
+            .populate('friends', 'username displayName avatar')
+            .select('-password');
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User tidak ditemukan."
+            });
+        }
+
+        res.json({
+            success: true,
+            data: {
+                _id: user._id,
+                username: user.username,
+                displayName: user.displayName,
+                email: user.email,
+                description: user.description,
+                level: user.level,
+                xp: user.xp,
+                friends: user.friends || [],
+                selectedSubjects: user.selectedSubjects || [],
+                avatar: user.avatar,
+                achievements: user.achievements || [],
+                notifications: user.notifications || [],
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
+            }
+        });
+    } catch (error) {
+        console.error("Get user error:", error);
+        res.status(500).json({ success: false, message: "Terjadi kesalahan saat mengambil data user." });
+    }
+});
 
 // Get current user profile
 route.get("/me", verifyToken, async (req, res) => {
@@ -289,6 +323,38 @@ route.post("/xp/add", verifyToken, async (req, res) => {
             message: "Gagal menambahkan XP."
         });
     }
+});
+
+// Upload user avatar (Vercel Blob Storage)
+route.post('/user/avatar', verifyToken, async (req, res) => {
+    const form = formidable({ maxFileSize: 1 * 1024 * 1024 }); // 1MB limit
+    form.parse(req, async (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({ success: false, message: 'File too large or invalid.' });
+        }
+        const file = files.avatar;
+        if (!file) {
+            return res.status(400).json({ success: false, message: 'No file uploaded.' });
+        }
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)) {
+            return res.status(400).json({ success: false, message: 'Invalid file type.' });
+        }
+        try {
+            const user = await User.findById(req.userId);
+            if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
+            // Delete old avatar if not default
+            if (user.avatar && !user.avatar.includes('default-avatar')) {
+                try { await del(user.avatar); } catch (e) { /* ignore */ }
+            }
+            // Upload new avatar
+            const blob = await put(`avatars/${user._id}_${Date.now()}`, file.filepath, { access: 'public' });
+            user.avatar = blob.url;
+            await user.save();
+            res.json({ success: true, url: blob.url });
+        } catch (e) {
+            res.status(500).json({ success: false, message: 'Upload failed.' });
+        }
+    });
 });
 
 export default route;

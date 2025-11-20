@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Navigation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/sidebar.css"/>
+    <link rel="stylesheet" href="/public/dashboard.css"/>
+</head>
+<body>
+    <komponen sidebar />
+
+    <main class="main-content">
+        <!-- Top 3 Stats Row -->
+        <div class="top-stats">
+            <!-- Level Card -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-star"></i>
+                    <h3>Level & XP</h3>
+                </div>
+                <div class="level-info">
+                    <div class="level-badge">
+                        <span id="userLevel">1</span>
+                    </div>
+                    <div class="level-details">
+                        <p class="level-text">Level <span id="userLevelText">1</span></p>
+                        <div class="xp-bar">
+                            <div id="xpProgress" class="xp-fill"></div>
+                        </div>
+                        <p class="xp-text"><span id="xpCurrent">0</span> / <span id="xpMax">100</span> XP</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friends Card -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-user-friends"></i>
+                    <h3>Friends</h3>
+                </div>
+                <div class="friends-info">
+                    <div class="friends-count">
+                        <span id="friendsCount">0</span>
+                    </div>
+                    <p id="friendsText">No friends yet</p>
+                    <a href="/u/teman" class="btn-link">View Friends</a>
+                </div>
+            </div>
+
+            <!-- Notifications Card -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-bell"></i>
+                    <h3>Notifications</h3>
+                </div>
+                <div class="notifications-info">
+                    <div class="notifications-count">
+                        <span id="notificationsCount">0</span>
+                    </div>
+                    <p id="notificationsText">No new notifications</p>
+                    <a href="#" class="btn-link">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Twitter-like New Post Section -->
+        <div class="new-post-section">
+            <div class="post-composer">
+                <img id="composerAvatar" src="/public/default-profile.png" alt="Your avatar" class="composer-avatar">
+                <div class="composer-input-area">
+                    <textarea id="postInput" class="post-input" placeholder="Bagikan pencapaian atau pertanyaan kamu..." rows="3"></textarea>
+                    <div class="composer-actions">
+                        <div class="post-actions-left">
+                            <button class="action-btn" title="Tambah emoji">
+                                <i class="fas fa-smile"></i>
+                            </button>
+                            <button class="action-btn" title="Tambah gambar">
+                                <i class="fas fa-image"></i>
+                            </button>
+                        </div>
+                        <button id="postBtn" class="btn-post">Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feed Section -->
+        <div class="feed-section">
+            <h3 class="feed-title">Activity Feed</h3>
+            <div id="feedContainer" class="feed-container">
+                <p class="empty-feed">No posts yet. Be the first to share!</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/public/sidebar.js"></script>
+    <script src="/public/dashboard.js"></script>
+</body>
+</html>

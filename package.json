@@ -15,14 +15,16 @@
   "type": "module",
   "dependencies": {
     "@upstash/redis": "^1.35.6",
+    "@vercel/blob": "^2.0.0",
     "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.0",
-    "compression": "^1.7.4",
+    "compression": "^1.8.1",
     "connect-mongo": "^5.1.0",
     "connect-redis": "^9.0.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
+    "formidable": "^3.5.4",
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.3"

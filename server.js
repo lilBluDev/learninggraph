@@ -97,6 +97,13 @@ app.use("/public", express.static(path.join(__dirname, "public"), {
     lastModified: false
 }));
 
+// Also serve public files at the root path so assets work whether
+// HTML references "/public/asset" or "/asset" (helps some deployments).
+app.use(express.static(path.join(__dirname, "public"), {
+    maxAge: "1d",
+    etag: false,
+    lastModified: false
+}));
 // App routes
 app.use("/api", APIroute);
 app.use("/u", requireAuth, UserRoute);
@@ -113,10 +120,6 @@ app.get("/", setCacheHeaders, (req, res) => {
 
 app.get("/matapelajaran", setCacheHeaders, (req, res) => {
     res.send(prosesHalaman("mataPelajaran"));
-});
-
-app.get("/leaderboard", setCacheHeaders, (req, res) => {
-    res.send(prosesHalaman("leaderboard"));
 });
 
 app.get("/ulasan", setCacheHeaders, (req, res) => {
