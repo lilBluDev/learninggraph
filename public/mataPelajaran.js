@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.stopPropagation();
                 const subject = card.querySelector('h3').textContent;
                 alert(`Fitur pembelajaran untuk "${subject}" akan segera tersedia!`);
+                //chek user login kalau belum maka 
             });
         }
     });
