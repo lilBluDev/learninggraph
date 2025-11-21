@@ -98,6 +98,8 @@ export default function prosesHalaman(halaman) {
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         '<meta charset="UTF-8">'
     ])
+    // Inject global UI notify script so all pages can use unified modal/toast
+    data = injectIntoHead(data, `<script src="/public/ui-notify.js"></script>`);
 
    try {
         if (["utama", "daftarlogin", "panduan", "kontak"].includes(halaman)) {

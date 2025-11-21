@@ -87,12 +87,12 @@
                 <div class="form-group">
                     <label>Warna Catatan</label>
                     <div class="color-picker">
-                        <div class="color-option selected" style="background: #667eea" onclick="selectColor('#667eea')"></div>
-                        <div class="color-option" style="background: #f093fb" onclick="selectColor('#f093fb')"></div>
-                        <div class="color-option" style="background: #4facfe" onclick="selectColor('#4facfe')"></div>
-                        <div class="color-option" style="background: #43e97b" onclick="selectColor('#43e97b')"></div>
-                        <div class="color-option" style="background: #fa709a" onclick="selectColor('#fa709a')"></div>
-                        <div class="color-option" style="background: #feca57" onclick="selectColor('#feca57')"></div>
+                        <div class="color-option selected" data-color="#667eea" style="background: #667eea" onclick="selectColor('#667eea')"></div>
+                        <div class="color-option" data-color="#f093fb" style="background: #f093fb" onclick="selectColor('#f093fb')"></div>
+                        <div class="color-option" data-color="#4facfe" style="background: #4facfe" onclick="selectColor('#4facfe')"></div>
+                        <div class="color-option" data-color="#43e97b" style="background: #43e97b" onclick="selectColor('#43e97b')"></div>
+                        <div class="color-option" data-color="#fa709a" style="background: #fa709a" onclick="selectColor('#fa709a')"></div>
+                        <div class="color-option" data-color="#feca57" style="background: #feca57" onclick="selectColor('#feca57')"></div>
                     </div>
                     <input type="hidden" id="warna" value="#667eea">
                 </div>
@@ -311,7 +311,7 @@
             document.getElementById('warna').value = color;
             document.querySelectorAll('.color-option').forEach(opt => {
                 opt.classList.remove('selected');
-                if (opt.style.background === color) opt.classList.add('selected');
+                if (opt.dataset && opt.dataset.color === color) opt.classList.add('selected');
             });
         }
 

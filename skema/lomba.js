@@ -11,7 +11,7 @@ const lombaSchema = new mongoose.Schema({
     contact: { type: String, required: true },
     registrationLink: { type: String, required: true },
     poster: { type: String },
-    status: { type: String, enum: ['pending', 'approved'], default: 'pending' }
+    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
 }, { timestamps: true });
 
 const Lomba = mongoose.model('Lomba', lombaSchema);

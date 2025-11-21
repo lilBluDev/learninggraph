@@ -415,6 +415,11 @@ html, body {
     color: var(--muted);
 }
 
+.status-badge.rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
 /* Action Buttons */
 .table-actions {
     display: flex;

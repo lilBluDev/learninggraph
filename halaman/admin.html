@@ -38,6 +38,10 @@
                     <i class="fas fa-cog"></i>
                     <span>Pengaturan</span>
                 </a>
+                <a href="#" class="nav-item" onclick="switchTab('lombas')">
+                    <i class="fas fa-trophy"></i>
+                    <span>Kelola Lomba</span>
+                </a>
             </nav>
 
             <div class="admin-footer">
@@ -304,6 +308,36 @@
                         </div>
                     </div>
                 </div>
+                <!-- Lomba Tab -->
+                <div id="lombas" class="tab-content">
+                    <div class="section-header">
+                        <div>
+                            <h2>Kelola Lomba</h2>
+                            <p class="muted">Review dan approve lomba yang disubmit pengguna</p>
+                        </div>
+                        <div class="header-actions">
+                            <input type="text" id="lombaSearch" placeholder="Cari lomba..." class="search-input" onkeyup="searchLombasAdmin()">
+                        </div>
+                    </div>
+
+                    <div class="quizzes-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Judul</th>
+                                    <th>Penyelenggara</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                    <th>Dibuat</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lombasTableBody">
+                                <tr><td colspan="6" class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -378,6 +412,21 @@
                     <button type="submit" class="btn-primary">Simpan Soal</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Approve Lomba Modal -->
+    <div id="approveLombaModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeApproveModal()">&times;</button>
+            <h2>Konfirmasi Approve</h2>
+            <div id="approveLombaModalBody">
+                <p>Apakah Anda yakin ingin menyetujui lomba ini?</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeApproveModal()">Batal</button>
+                <button class="btn-primary" id="confirmApproveBtn">Setujui</button>
+            </div>
         </div>
     </div>
 

@@ -29,9 +29,195 @@ async function loadDashboard() {
         await loadOverviewStats();
         await loadUsers();
         await loadQuizzes();
+            await loadLombasAdmin();
     } catch (error) {
         console.error('Error loading dashboard:', error);
         showError('Gagal memuat dashboard');
+    }
+}
+
+// ----- Lomba Admin Management -----
+let allLombasAdmin = [];
+
+async function loadLombasAdmin() {
+    const tbody = document.getElementById('lombasTableBody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat lomba...</td></tr>';
+    try {
+        const resp = await fetch('/api/lombas');
+        if (!resp.ok) {
+            const txt = await resp.text().catch(() => '');
+            throw new Error(`Gagal memuat lomba (status ${resp.status}) ${txt}`);
+        }
+        const data = await resp.json();
+        // API returns array of lombas
+        allLombasAdmin = Array.isArray(data) ? data : (data.data || []);
+        renderLombasAdminTable(allLombasAdmin);
+    } catch (error) {
+        console.error('Error loading lombas for admin:', error);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Gagal memuat data lomba: ${escapeHtml(error.message || '')}</td></tr>`;
+    }
+}
+
+function renderLombasAdminTable(lombas) {
+    const tbody = document.getElementById('lombasTableBody');
+    if (!tbody) return;
+
+    if (!lombas || lombas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Tidak ada lomba ditemukan</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = lombas.map(lomba => `
+        <tr>
+            <td><strong>${escapeHtml(lomba.title)}</nobr></strong></td>
+            <td>${escapeHtml(lomba.organizer || '-')}</td>
+            <td>${formatDate(lomba.deadline)}</td>
+            <td><span class="status-badge ${escapeHtml(lomba.status)}">${escapeHtml(lomba.status)}</span></td>
+            <td>${formatDate(lomba.createdAt)}</td>
+            <td>
+                <div class="table-actions">
+                    ${lomba.status === 'pending' ? `
+                        <button class="btn-icon view approve-btn" data-id="${lomba._id}" data-title="${escapeHtml(lomba.title)}" title="Approve">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn-icon delete" onclick="rejectLomba('${lomba._id}')" title="Reject">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    ` : `
+                        <button class="btn-icon view" onclick="viewLombaAdmin('${lomba._id}')" title="Lihat">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon delete" onclick="deleteLombaAdmin('${lomba._id}')" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `}
+                </div>
+            </td>
+        </tr>
+    `).join('');
+    // Attach click listeners to approve buttons (use dataset to avoid broken inline JS)
+    tbody.querySelectorAll('.approve-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            openApproveModal(btn.dataset.id, btn.dataset.title);
+        });
+    });
+}
+
+// Modal handling for approve
+let pendingApproveLombaId = null;
+
+function openApproveModal(id, title) {
+    pendingApproveLombaId = id;
+    const modal = document.getElementById('approveLombaModal');
+    const body = document.getElementById('approveLombaModalBody');
+    const confirmBtn = document.getElementById('confirmApproveBtn');
+    if (body) body.innerHTML = `<p>Apakah Anda yakin ingin menyetujui lomba berikut?</p><p><strong>${escapeHtml(title || '')}</strong></p>`;
+    if (modal) modal.classList.remove('hidden');
+    if (confirmBtn) {
+        confirmBtn.onclick = async () => {
+            await confirmApproveLomba();
+        };
+    }
+}
+
+function closeApproveModal() {
+    pendingApproveLombaId = null;
+    const modal = document.getElementById('approveLombaModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function confirmApproveLomba() {
+    if (!pendingApproveLombaId) return;
+    try {
+        const resp = await fetch(`/api/lombas/${pendingApproveLombaId}/approve`, { method: 'PATCH' });
+        const result = await resp.json();
+        if (result.success) {
+            showSuccess('Lomba berhasil diapprove');
+            closeApproveModal();
+            await loadLombasAdmin();
+        } else {
+            showError(result.message || 'Gagal approve lomba');
+        }
+    } catch (error) {
+        console.error('Approve error:', error);
+        showError('Gagal approve lomba');
+    }
+}
+
+async function approveLomba(id) {
+    if (!(await uiNotify.confirm('Setujui lomba ini?'))) return;
+    try {
+        const resp = await fetch(`/api/lombas/${id}/approve`, { method: 'PATCH' });
+        const result = await resp.json();
+        if (result.success) {
+            showSuccess('Lomba berhasil diapprove');
+            await loadLombasAdmin();
+        } else {
+            showError(result.message || 'Gagal approve lomba');
+        }
+    } catch (error) {
+        console.error('Approve error:', error);
+        showError('Gagal approve lomba');
+    }
+}
+
+async function rejectLomba(id) {
+    if (!(await uiNotify.confirm('Tolak lomba ini? (status akan diubah menjadi rejected)'))) return;
+    try {
+        const resp = await fetch(`/api/lombas/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'rejected' })
+        });
+
+        const result = await resp.json();
+        if (result.success) {
+            showSuccess('Lomba berhasil ditolak');
+            await loadLombasAdmin();
+        } else {
+            showError(result.message || 'Gagal menolak lomba');
+        }
+    } catch (error) {
+        console.error('Reject error:', error);
+        showError('Gagal menolak lomba');
+    }
+}
+
+function searchLombasAdmin() {
+    const q = document.getElementById('lombaSearch')?.value?.toLowerCase() || '';
+    const filtered = allLombasAdmin.filter(l => (`${l.title} ${l.organizer} ${l.description}`).toLowerCase().includes(q));
+    renderLombasAdminTable(filtered);
+}
+
+async function viewLombaAdmin(id) {
+    // Reuse public detail modal if available, otherwise fetch and alert
+    try {
+        const resp = await fetch(`/api/lombas/${id}`);
+        if (!resp.ok) throw new Error('Gagal memuat lomba');
+        const lomba = await resp.json();
+        const body = `<p><strong>Judul:</strong> ${escapeHtml(lomba.title)}</p>
+                      <p><strong>Penyelenggara:</strong> ${escapeHtml(lomba.organizer)}</p>
+                      <p><strong>Status:</strong> ${escapeHtml(lomba.status)}</p>`;
+        await uiNotify.alert(body);
+    } catch (e) {
+        showError('Gagal memuat detail lomba');
+    }
+}
+
+async function deleteLombaAdmin(id) {
+    if (!(await uiNotify.confirm('Hapus lomba ini secara permanen?'))) return;
+    try {
+        const resp = await fetch(`/api/lombas/${id}`, { method: 'DELETE' });
+        const result = await resp.json();
+        if (result.success) {
+            showSuccess('Lomba dihapus');
+            await loadLombasAdmin();
+        } else {
+            showError(result.message || 'Gagal menghapus lomba');
+        }
+    } catch (e) {
+        console.error('Delete lomba admin error:', e);
+        showError('Gagal menghapus lomba');
     }
 }
 
@@ -180,11 +366,11 @@ function closeUserModal() {
 
 async function editUser(userId) {
     // Bisa implement edit modal di sini
-    alert('Edit user akan diimplementasikan');
+    uiNotify.toast('Edit user akan diimplementasikan', 'info');
 }
 
 async function deleteUser(userId) {
-    if (!confirm('Yakin ingin menghapus user ini?')) return;
+    if (!(await uiNotify.confirm('Yakin ingin menghapus user ini?'))) return;
 
     try {
         const response = await fetch(`/api/admin/users/${userId}`, {
@@ -205,7 +391,7 @@ async function deleteUser(userId) {
 }
 
 async function promoteToAdmin(userId) {
-    if (!confirm('Jadikan user ini sebagai admin?')) return;
+    if (!(await uiNotify.confirm('Jadikan user ini sebagai admin?'))) return;
 
     try {
         const response = await fetch(`/api/admin/users/${userId}/promote`, {
@@ -397,7 +583,7 @@ function saveQuestion(e) {
 
 function editQuiz(quizId) {
     // Bisa implement edit quiz modal
-    alert('Edit kuis akan diimplementasikan');
+    uiNotify.toast('Edit kuis akan diimplementasikan', 'info');
 }
 
 async function togglePublish(quizId, currentStatus) {
@@ -420,7 +606,7 @@ async function togglePublish(quizId, currentStatus) {
 }
 
 async function deleteQuiz(quizId) {
-    if (!confirm('Yakin ingin menghapus kuis ini?')) return;
+    if (!(await uiNotify.confirm('Yakin ingin menghapus kuis ini?'))) return;
 
     try {
         const response = await fetch(`/api/admin/quizzes/${quizId}`, {
@@ -487,11 +673,10 @@ function editQuestion(index) {
     document.getElementById('questionModal').classList.remove('hidden');
 }
 
-function deleteQuestion(index) {
-    if (confirm('Hapus soal ini?')) {
-        quizQuestions.splice(index, 1);
-        renderQuestionsList();
-    }
+async function deleteQuestion(index) {
+    if (!(await uiNotify.confirm('Hapus soal ini?'))) return;
+    quizQuestions.splice(index, 1);
+    renderQuestionsList();
 }
 
 function updateQuestionTypeOptions() {
@@ -674,6 +859,11 @@ function switchTab(tabName) {
     document.getElementById('pageSubtitle').textContent = 'Kelola platform LearningGraph';
 
     currentTab = tabName;
+
+    // If admin opens lombas tab, refresh list
+    if (tabName === 'lombas') {
+        loadLombasAdmin();
+    }
 }
 
 function renderPagination(elementId, pagination, callback) {
@@ -736,9 +926,11 @@ function formatDate(dateString) {
 }
 
 function showError(message) {
-    alert(message); // Bisa implement toast notification
+    if (window.uiNotify && uiNotify.toast) uiNotify.toast(message, 'error');
+    else alert(message);
 }
 
 function showSuccess(message) {
-    alert(message); // Bisa implement toast notification
+    if (window.uiNotify && uiNotify.toast) uiNotify.toast(message, 'success');
+    else alert(message);
 }
