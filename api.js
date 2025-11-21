@@ -3,14 +3,16 @@ import { Router } from "express";
 import formidable from 'formidable';
 import multer from 'multer';
 import catatanRoute from "./apiCatatan.js";
-import postRoute from './apiPost.js';
-import lombaRoute from './apiLomba.js';
 import friendRoute from './apiFriend.js';
+import kuisRoute from './apiKuis.js';
+import lombaRoute from './apiLomba.js';
+import postRoute from './apiPost.js';
 import { generateToken, verifyToken } from "./middleware/auth.js";
 import User from "./skema/user.js";
 
 const route = Router();
 
+route.use("/kuis", kuisRoute);
 route.use("/friends", friendRoute);
 route.use("/lombas", lombaRoute);
 route.use("/catatan", catatanRoute);

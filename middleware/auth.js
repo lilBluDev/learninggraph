@@ -72,6 +72,16 @@ export const requireAuth = async (req, res, next) => {
     }
 };
 
+export const isAdmin = (req, res, next) => {
+    if (!req.user || !req.user.isAdmin()) {
+        return res.status(403).json({
+            success: false,
+            message: "Anda tidak memiliki akses admin."
+        });
+    }
+    next();
+};
+
 export const redirectIfAuth = (req, res, next) => {
     if (req.session && req.session.userId) {
         return res.redirect("/u");

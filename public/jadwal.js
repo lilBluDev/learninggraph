@@ -25,7 +25,6 @@ const API = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(eventData)
             });
-            console.log(response);
             if (!response.ok) throw new Error('Failed to create event');
             return await response.json();
         } catch (error) {
@@ -188,7 +187,6 @@ function renderEvents() {
     list.innerHTML = events.map(event => {
         const isUrgent = event.priority === 'urgent';
         const isToday = event.date === today;
-        console.log(event)
         return `
             <div class="event-item ${isUrgent ? 'urgent' : ''}">
                 <div class="event-date">
@@ -243,9 +241,9 @@ function renderTodos() {
     list.innerHTML = todos.map(todo => `
         <div class="todo-item ${todo.completed ? 'completed' : ''}">
             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} 
-                   onchange="toggleTodo('${todo.id}', ${!todo.completed})">
+                   onchange="toggleTodo('${todo._id}', ${!todo.completed})">
             <span class="todo-text">${todo.text}</span>
-            <button class="btn-small btn-delete" onclick="deleteTodo('${todo.id}')">
+            <button class="btn-small btn-delete" onclick="deleteTodo('${todo._id}')">
                 <i class="fas fa-times"></i>
             </button>
         </div>
