@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Player - LearningGraph</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/quiz-player.css"/>
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Header -->
+        <div class="quiz-header">
+            <div class="quiz-title-section">
+                <h1 id="quizTitle">Loading...</h1>
+                <p id="quizSubject"></p>
+            </div>
+            <div class="quiz-info">
+                <div class="timer-display">
+                    <i class="fas fa-hourglass-end"></i>
+                    <span id="timerDisplay">00:00</span>
+                </div>
+                <div class="progress-display">
+                    <span id="progressText">0 / 0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="quiz-content">
+            <!-- Questions -->
+            <div class="questions-section">
+                <div class="question-container" id="questionContainer">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Memuat soal...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="quiz-navigation">
+                <button id="prevBtn" class="nav-btn" onclick="previousQuestion()" disabled>
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </button>
+                <div class="question-selector" id="questionSelector"></div>
+                <button id="nextBtn" class="nav-btn" onclick="nextQuestion()">
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Submit Modal -->
+        <div id="submitModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Yakin ingin menyelesaikan kuis?</h2>
+                <p>Anda akan menyelesaikan kuis setelah menekan "Selesaikan"</p>
+                <div class="modal-actions">
+                    <button class="btn-cancel" onclick="closeSubmitModal()">Kembali</button>
+                    <button class="btn-submit" onclick="submitQuiz()">Selesaikan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button (Fixed at bottom) -->
+        <div class="quiz-footer">
+            <button class="btn-submit-quiz" onclick="openSubmitModal()">
+                <i class="fas fa-check"></i> Selesaikan Kuis
+            </button>
+        </div>
+    </div>
+
+    <script src="/public/quiz-player.js"></script>
+</body>
+</html>

@@ -99,24 +99,7 @@ export default function prosesHalaman(halaman) {
         '<meta charset="UTF-8">'
     ])
 
-    // If serving the dashboard, inline its critical CSS to ensure styles
-    // load even when static files are not reachable or cached incorrectly.
-    // try {
-    //     if (halaman === 'dashboard') {
-    //         const dashboardCssPath = path.join(__dirname, '../public/dashboard.css');
-    //         if (fs.existsSync(dashboardCssPath)) {
-    //             const cssContent = fs.readFileSync(dashboardCssPath, 'utf8');
-    //             const styleTag = `<style id="inline-dashboard-css">\n${cssContent}\n</style>`;
-    //             data = injectIntoHead(data, styleTag);
-    //         }x
-    //     }
-    // } catch (err) {
-    //     console.error('Gagal meng-inline dashboard CSS:', err.message);
-    // }
-
-    // Fallback: inline navbar CSS on all pages so the navbar styles appear
-    // even if static file serving fails or requests are routed differently.
-    try {
+   try {
         if (["utama", "daftarlogin", "panduan", "kontak"].includes(halaman)) {
             const navbarCssPath = path.join(__dirname, '../public/navbar.css');
             if (fs.existsSync(navbarCssPath)) {

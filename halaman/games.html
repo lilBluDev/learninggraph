@@ -4,23 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearningGraph - Games</title>
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/public/global.css"/>
-    <link rel="stylesheet" href="/public/sidebar.css"/>
-    <link rel="stylesheet" href="/public/games.css"/>
+
+    <!-- GLOBAL STYLE -->
+    <link rel="stylesheet" href="/public/global.css">
+    <link rel="stylesheet" href="/public/sidebar.css">
+
+    <!-- FIXED GAME STYLE -->
+    <link rel="stylesheet" href="/public/games.css">
 </head>
 <body>
-    <komponen sidebar />
+
+    <!-- Sidebar tidak dihapus -->
+    <komponen sidebar></komponen>
 
     <main class="main-content">
+
+        <!-- Header -->
         <section class="header">
             <h1><i class="fas fa-gamepad"></i> Games</h1>
             <p class="muted">Permainan edukatif untuk mengasah kemampuan</p>
-            <div class="games-grid" id="gamesGrid"></div>
         </section>
+
+        <!-- Game Cards -->
+        <section class="games-showcase">
+            <div class="game-card" data-game="quiz-battle">
+                <div class="game-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3>Quiz Battle</h3>
+                <p>Bertarung menjawab kuis dengan pemain lain</p>
+                <button class="btn-play" onclick="openGame('quiz-battle')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <div class="game-card" data-game="quick-quiz">
+                <div class="game-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Quick Quiz</h3>
+                <p>Selesaikan kuis secepat mungkin dalam waktu terbatas</p>
+                <button class="btn-play" onclick="openGame('quick-quiz')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <div class="game-card coming-soon">
+                <div class="game-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Memory Master</h3>
+                <p>Asah memori dengan permainan matching yang seru</p>
+                <div class="badge-coming">Segera Hadir</div>
+            </div>
+
+            <div class="game-card coming-soon">
+                <div class="game-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Word Hunt</h3>
+                <p>Temukan kata-kata tersembunyi dalam grid</p>
+                <div class="badge-coming">Segera Hadir</div>
+            </div>
+        </section>
+
+        <!-- Quiz List -->
+        <section class="quiz-section">
+            <div class="section-header">
+                <h2>Daftar Kuis Tersedia</h2>
+
+                <div class="filters">
+                    <select id="subjectFilter" onchange="filterQuizzes()">
+                        <option value="">Semua Mata Pelajaran</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="Fisika">Fisika</option>
+                        <option value="Kimia">Kimia</option>
+                        <option value="Biologi">Biologi</option>
+                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                        <option value="Sejarah">Sejarah</option>
+                        <option value="Geografi">Geografi</option>
+                        <option value="Ekonomi">Ekonomi</option>
+                        <option value="Sosiologi">Sosiologi</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="quizzes-grid" id="quizzesGrid">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat kuis...
+                </div>
+            </div>
+
+            <div id="pagination" class="pagination"></div>
+        </section>
+
+        <!-- Game Mode Modal -->
+        <div id="modeModal" class="modal hidden">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModeModal()">&times;</button>
+
+                <h2>Pilih Mode Bermain</h2>
+
+                <div class="mode-options">
+                    <div class="mode-card" onclick="startSoloMode()">
+                        <div class="mode-icon">
+                            <i class="fas fa-person"></i>
+                        </div>
+                        <h3>Solo Mode</h3>
+                        <p>Selesaikan kuis dalam waktu yang ditentukan</p>
+                    </div>
+
+                    <div class="mode-card" onclick="startMatchMode()">
+                        <div class="mode-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Match Mode</h3>
+                        <p>Bertarung dengan pemain lain secara real-time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
+    <!-- Scripts -->
     <script src="/public/sidebar.js"></script>
     <script src="/public/games.js"></script>
+
 </body>
 </html>
