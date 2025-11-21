@@ -277,7 +277,7 @@ async function openDetailModal(lombaId) {
                 <h3>${lomba.title}</h3>
                 <div class="detail-meta">
                     <span class="meta-badge lomba-category ${lomba.category}">${getCategoryLabel(lomba.category)}</span>
-                    <span class="meta-badge" style="background: #e9ecef; color: #495057;">${getLevelLabel(lomba.level)}</span>
+                    <span class="meta-badge lomba-category" style="background: #e9ecef; color: #495057;">${getLevelLabel(lomba.level)}</span>
                     ${lomba.status === 'pending' ? '<span class="meta-badge" style="background: #ffc107; color: white;">Pending Review</span>' : ''}
                 </div>
                 

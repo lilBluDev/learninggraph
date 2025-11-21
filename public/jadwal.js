@@ -238,7 +238,7 @@ function renderTodos() {
         return;
     }
     
-    list.innerHTML = todos.map(todo => `
+    list.innerHTML = todos.map(todo => {return `
         <div class="todo-item ${todo.completed ? 'completed' : ''}">
             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} 
                    onchange="toggleTodo('${todo._id}', ${!todo.completed})">
@@ -247,7 +247,7 @@ function renderTodos() {
                 <i class="fas fa-times"></i>
             </button>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 async function toggleTodo(todoId, completed) {

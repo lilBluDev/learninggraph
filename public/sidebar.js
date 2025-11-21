@@ -77,12 +77,60 @@ if (window.innerWidth <= 768) {
     });
 }
 
+// Show logout confirmation modal (called from sidebar HTML)
 function handleLogout() {
-    if (confirm('Apakah Anda yakin ingin keluar?')) {
-        fetch('/api/logout', {
-            method: 'POST',
-        })
-        window.location.href = '/login';
+    const modal = document.getElementById('logoutModal');
+    if (modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        // trap focus if needed (simple)
+        const confirmBtn = document.getElementById('logoutConfirm');
+        if (confirmBtn) confirmBtn.focus();
+    } else {
+        // Fallback to confirm dialog
+        if (confirm('Apakah Anda yakin ingin keluar?')) doLogout();
     }
 }
+
+async function doLogout() {
+    try {
+        await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch (e) {
+        // ignore network errors, proceed to redirect
+        console.warn('Logout request failed', e);
+    }
+    // Clear client-side token if present
+    try { localStorage.removeItem('token'); } catch(e){}
+    window.location.href = '/daftarlogin';
+}
+
+function closeLogoutModal() {
+    const modal = document.getElementById('logoutModal');
+    if (modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+}
+
+// Wire modal buttons
+document.addEventListener('click', (e) => {
+    const confirmBtn = document.getElementById('logoutConfirm');
+    const cancelBtn = document.getElementById('logoutCancel');
+    if (e.target === confirmBtn) {
+        doLogout();
+    }
+    if (e.target === cancelBtn) {
+        closeLogoutModal();
+    }
+    // Close modal when clicking backdrop
+    const modal = document.getElementById('logoutModal');
+    if (modal && e.target.classList && e.target.classList.contains('modal-backdrop')) {
+        closeLogoutModal();
+    }
+});
+
+// Close modal with Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLogoutModal();
+});
 

@@ -14,3 +14,23 @@ body {
     --primary: #ff9800; /* orange accent to match jadwal */
     --secondary: #d97706;
 }
+/* Base button styles: provide a single source of truth for buttons across pages */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: inherit;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* Ensure buttons do not stretch unexpectedly inside flex containers unless explicitly set */
+.btn { flex: 0 0 auto; min-width: 0; }
