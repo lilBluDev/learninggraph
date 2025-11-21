@@ -421,3 +421,28 @@ body {
         justify-content: center;
     }
 }
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
+    .waiting-container {
+        max-width: 720px;
+        padding: 0 1rem;
+    }
+
+    .waiting-content {
+        padding: 2rem 1.25rem;
+    }
+
+    .loading-animation {
+        width: 120px;
+        height: 120px;
+    }
+
+    .loading-animation i {
+        font-size: 3rem;
+    }
+
+    .btn-back, .btn-copy, .btn-share {
+        padding: 0.75rem 1rem;
+    }
+}

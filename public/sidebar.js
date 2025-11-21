@@ -68,37 +68,13 @@ function updateSidebarUserCard(user) {
 }
 
 const sidebar = document.getElementById('sidebar');
-let sidebarToggle = document.getElementById('sidebarToggle');
 
-// Ensure sidebar exists
+// On small devices (phone/tablet) ensure the sidebar is visible by default
 if (sidebar) {
-    // If there's no toggle in the DOM, create a mobile toggle button dynamically
-    if (!sidebarToggle) {
-        sidebarToggle = document.createElement('button');
-        sidebarToggle.id = 'sidebarToggle';
-        sidebarToggle.className = 'sidebar-toggle';
-        sidebarToggle.setAttribute('aria-label', 'Toggle sidebar');
-        sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
-        document.body.appendChild(sidebarToggle);
+    const isSmall = window.innerWidth <= 1024; // treat up to 1024px as tablet
+    if (isSmall) {
+        sidebar.classList.add('mobile-open');
     }
-
-    // Toggle sidebar mobile-open class on click (works on desktop too but mainly for mobile)
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('mobile-open');
-    });
-
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', (e) => {
-        const isMobile = window.innerWidth <= 768;
-        if (!isMobile) return;
-        if (!sidebar.classList.contains('mobile-open')) return;
-        const target = e.target;
-        if (!target) return;
-        // If click is inside sidebar or on the toggle, do nothing
-        if (sidebar.contains(target) || sidebarToggle.contains(target)) return;
-        // Otherwise close
-        sidebar.classList.remove('mobile-open');
-    });
 }
 
 // Show logout confirmation modal (called from sidebar HTML)

@@ -224,22 +224,29 @@
 }
 
 @media (max-width: 768px) {
+    /* On phones/tablets show the sidebar by default and keep content shifted */
     .sidebar {
-        transform: translateX(-100%);
+        transform: translateX(0);
+        width: 260px;
     }
 
+    /* mobile-open remains supported for compatibility but is not required */
     .sidebar.mobile-open {
         transform: translateX(0);
     }
 
     .main-content {
-        margin-left: 0;
+        margin-left: 260px;
     }
 
-    /* Ensure toggle is visible on small screens */
-    .sidebar-toggle {
-        left: 16px;
-        top: 16px;
+    /* Ensure collapsed class does not hide details on small screens */
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    .sidebar.collapsed .user-info {
+        opacity: 1;
+        width: auto;
     }
 }
 

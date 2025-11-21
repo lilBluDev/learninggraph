@@ -449,4 +449,38 @@ html, body {
     .matching-container {
         grid-template-columns: 1fr;
     }
+
+    /* Make question selector and options touch-friendly */
+    .question-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 0.9rem;
+    }
+
+    .question-selector {
+        gap: 0.4rem;
+    }
+
+    .option {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .option input[type="radio"],
+    .option input[type="checkbox"] {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .question-btn {
+        min-width: 44px;
+        height: 44px;
+        font-size: 0.95rem;
+    }
+
+    .option {
+        padding: 1rem;
+    }
 }

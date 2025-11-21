@@ -368,3 +368,29 @@ body {
         justify-content: center;
     }
 }
+
+/* Improve tablet scaling */
+@media (max-width: 1024px) {
+    .results-container {
+        padding: 0 1rem;
+    }
+
+    .results-header {
+        padding: 2rem 1.25rem;
+    }
+
+    .grade-badge {
+        width: 96px;
+        height: 96px;
+        font-size: 3rem;
+        line-height: 96px;
+    }
+
+    .score-text {
+        font-size: 2.25rem;
+    }
+
+    .stats-grid {
+        gap: 1rem;
+    }
+}

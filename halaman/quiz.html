@@ -120,6 +120,11 @@ html, body {
     gap: 0;
 }
 
+/* allow children to scroll correctly inside flex containers */
+.quiz-content, .question-section {
+    min-height: 0;
+}
+
 .question-section {
     display: flex;
     flex-direction: column;
@@ -174,6 +179,11 @@ html, body {
     padding: 2rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     flex: 1;
+}
+
+/* Ensure question container fits on small screens */
+.question-container {
+    max-width: 100%;
 }
 
 .loading {
@@ -550,6 +560,17 @@ html, body {
         border-left: none;
         border-top: 1px solid var(--border);
     }
+
+    /* Make question selector wrap nicely on tablet */
+    .question-grid {
+        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+        gap: 0.5rem;
+    }
+    .question-btn {
+        min-width: 44px;
+        height: 44px;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -569,7 +590,7 @@ html, body {
     }
 
     .question-container {
-        padding: 1rem;
+        padding: 0.75rem;
     }
 
     .question-navigation {
@@ -581,9 +602,42 @@ html, body {
         width: 100%;
     }
 
+    /* Mobile: compact, touch-friendly question buttons */
     .question-grid {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
         gap: 0.5rem;
+    }
+
+    .question-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 0.9rem;
+    }
+
+    /* Larger option hit areas on mobile */
+    .option {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .option input[type="radio"],
+    .option input[type="checkbox"] {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Reduce font sizes and image height so question content fits */
+    .question-text {
+        font-size: 1rem;
+    }
+
+    .question-image {
+        max-height: 180px;
+    }
+
+    .progress-section {
+        padding: 0.5rem 1rem;
     }
 
     .matching-container {
@@ -647,10 +701,10 @@ html, body {
 
                 <!-- Navigation Buttons -->
                 <div class="question-navigation">
-                    <button class="nav-btn-text" onclick="previousQuestion()">
+                    <button id="prevBtn" class="nav-btn-text" onclick="previousQuestion()">
                         <i class="fas fa-chevron-left"></i> Sebelumnya
                     </button>
-                    <button class="nav-btn-primary" onclick="nextQuestion()">
+                    <button id="nextBtn" class="nav-btn-primary" onclick="nextQuestion()">
                         Selanjutnya <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
