@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menunggu Pemain - LearningGraph</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/quiz-match-waiting.css"/>
+</head>
+<body>
+    <div class="waiting-container">
+        <!-- Header -->
+        <div class="waiting-header">
+            <button class="btn-back" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            <h1>Match Mode</h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="waiting-content">
+            <!-- Waiting State -->
+            <div id="waitingState" class="waiting-state">
+                <div class="loading-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring delay-1"></div>
+                    <div class="pulse-ring delay-2"></div>
+                    <i class="fas fa-users"></i>
+                </div>
+                
+                <h2>Menunggu Pemain Lain...</h2>
+                <p>Pertandingan akan dimulai ketika ada pemain lain yang bergabung</p>
+                
+                <div class="match-info">
+                    <div class="info-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span id="quizTitle">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-book"></i>
+                        <span id="quizSubject">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="duration">0 menit</span>
+                    </div>
+                </div>
+
+                <div class="share-section">
+                    <p class="share-text">Ajak teman untuk bergabung:</p>
+                    <div class="share-actions">
+                        <button class="btn-copy" onclick="copyMatchLink()">
+                            <i class="fas fa-copy"></i> Salin Link
+                        </button>
+                        <button class="btn-share" onclick="shareMatch()">
+                            <i class="fas fa-share"></i> Bagikan
+                        </button>
+                    </div>
+                    <div class="match-code">
+                        <span>Match ID:</span>
+                        <code id="matchCode">-</code>
+                    </div>
+                </div>
+
+                <div class="waiting-timer">
+                    <p>Menunggu selama <span id="waitingTime">0:00</span></p>
+                </div>
+            </div>
+
+            <!-- Starting State -->
+            <div id="startingState" class="starting-state hidden">
+                <div class="vs-animation">
+                    <div class="player player-left">
+                        <div class="player-avatar">
+                            <img id="player1Avatar" src="/public/defaultp.png" alt="Player 1">
+                        </div>
+                        <div class="player-info">
+                            <h3 id="player1Name">Player 1</h3>
+                            <p>Level <span id="player1Level">1</span></p>
+                        </div>
+                    </div>
+
+                    <div class="vs-badge">
+                        <span>VS</span>
+                    </div>
+
+                    <div class="player player-right">
+                        <div class="player-avatar">
+                            <img id="player2Avatar" src="/public/defaultp.png" alt="Player 2">
+                        </div>
+                        <div class="player-info">
+                            <h3 id="player2Name">Player 2</h3>
+                            <p>Level <span id="player2Level">1</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Pemain Ditemukan!</h2>
+                <p>Pertandingan akan dimulai dalam <span id="countdown">3</span> detik...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/public/quiz-match-waiting.js"></script>
+</body>
+</html>

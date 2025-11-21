@@ -12,10 +12,6 @@ route.get("/catatan", (req, res) => {
     res.send(prosesHalaman('catatan'));
 });
 
-route.get("/materi", (req, res) => {
-    res.send(prosesHalaman('materi'));
-});
-
 route.get("/games", (req, res) => {
     res.send(prosesHalaman('games'));
 });
@@ -30,6 +26,22 @@ route.get("/jadwal", (req, res) => {
 
 route.get("/lomba", (req, res) => {
     res.send(prosesHalaman('lomba'));
+});
+
+route.get("/admin", (req, res) => {
+    res.send(prosesHalaman('admin'));
+});
+
+route.get("/quiz", (req, res) => {
+    res.send(prosesHalaman('quiz'));
+});
+
+route.get("/quiz-results", (req, res) => {
+    res.send(prosesHalaman('quiz-results'));
+});
+
+route.get("/quiz-match-waiting", (req, res) => {
+    res.send(prosesHalaman('quiz-match-waiting'));
 });
 
 export default route

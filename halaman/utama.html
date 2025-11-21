@@ -40,12 +40,6 @@
     <!-- Leaderboard Section -->
         <section class="leaderboard-section">
             <h2 class="section-title">LEADERBOARD NASIONAL UPDATE</h2>
-            <div class="leaderboard-filter" style="margin-bottom:24px;text-align:center;">
-                <button data-cat="SMA" class="active">SMA</button>
-                <button data-cat="SMP">SMP</button>
-                <button data-cat="SD">SD</button>
-                <button data-cat="TK">TK</button>
-            </div>
 
             <div class="leaderboard-row">
                 <div id="podiumContainer" class="podium-container">
@@ -60,71 +54,51 @@
 
         <script src="/public/utamaLeaderboard.js"></script>
 
-    <!-- Mata Pelajaran Section -->
+    <!-- Daftar Fitur Section (replaces Mata Pelajaran) -->
     <section class="subjects-section">
         <div class="subjects-container">
             <div class="subjects-grid">
-                <h3>MATA PELAJARAN</h3>
+                <h3>DAFTAR FITUR</h3>
                 <div class="grid">
                     <div class="subject-card">
-                        <div class="subject-icon">📚</div>
-                        <div class="subject-name">Matematika</div>
-                        <div class="subject-class">Kelas 7-9</div>
+                        <div class="subject-icon">📝</div>
+                        <div class="subject-name">Latihan Soal</div>
+                        <div class="subject-class">Soal interaktif & pembahasan</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">🔬</div>
-                        <div class="subject-name">IPA</div>
-                        <div class="subject-class">Kelas 7-9</div>
+                        <div class="subject-icon">🏆</div>
+                        <div class="subject-name">Leaderboard</div>
+                        <div class="subject-class">Ranking berdasarkan level & XP</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">🌍</div>
-                        <div class="subject-name">IPS</div>
-                        <div class="subject-class">Kelas 7-9</div>
+                        <div class="subject-icon">📅</div>
+                        <div class="subject-name">Jadwal & ToDo</div>
+                        <div class="subject-class">Kalender tugas & pengingat</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">🇬🇧</div>
-                        <div class="subject-name">B. Inggris</div>
-                        <div class="subject-class">Kelas 7-9</div>
+                        <div class="subject-icon">📰</div>
+                        <div class="subject-name">Info Lomba</div>
+                        <div class="subject-class">Daftar lomba & pendaftaran</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">📖</div>
-                        <div class="subject-name">B. Indonesia</div>
-                        <div class="subject-class">Kelas 7-9</div>
+                        <div class="subject-icon">👤</div>
+                        <div class="subject-name">Profil & Pencapaian</div>
+                        <div class="subject-class">Lihat badge & progres</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">⚛️</div>
-                        <div class="subject-name">Fisika</div>
-                        <div class="subject-class">Kelas 10-12</div>
+                        <div class="subject-icon">📈</div>
+                        <div class="subject-name">Analitik Perkembangan</div>
+                        <div class="subject-class">Statistik belajar pribadi</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">🧪</div>
-                        <div class="subject-name">Kimia</div>
-                        <div class="subject-class">Kelas 10-12</div>
+                        <div class="subject-icon">🔔</div>
+                        <div class="subject-name">Notifikasi</div>
+                        <div class="subject-class">Pengingat & pengumuman</div>
                     </div>
                     <div class="subject-card">
-                        <div class="subject-icon">🧬</div>
-                        <div class="subject-name">Biologi</div>
-                        <div class="subject-class">Kelas 10-12</div>
-                    </div>
-                    <div class="subject-card">
-                        <div class="subject-icon">💻</div>
-                        <div class="subject-name">TIK</div>
-                        <div class="subject-class">Kelas 7-12</div>
-                    </div>
-                    <div class="subject-card">
-                        <div class="subject-icon">🎨</div>
-                        <div class="subject-name">Seni Budaya</div>
-                        <div class="subject-class">Kelas 7-12</div>
-                    </div>
-                    <div class="subject-card">
-                        <div class="subject-icon">⚽</div>
-                        <div class="subject-name">Penjaskes</div>
-                        <div class="subject-class">Kelas 7-12</div>
-                    </div>
-                    <div class="subject-card">
-                        <div class="subject-icon">📜</div>
-                        <div class="subject-name">Sejarah</div>
-                        <div class="subject-class">Kelas 10-12</div>
+                        <div class="subject-icon">💾</div>
+                        <div class="subject-name">Materi Tersimpan</div>
+                        <div class="subject-class">Simpan untuk nanti</div>
                     </div>
                 </div>
             </div>
@@ -135,20 +109,10 @@
     <section class="subjects-section">
         <div class="sidebar-info">
             <div class="info-lomba">
-                <h3>INFO LOMBA</h3>
-                <div class="lomba-cards">
-                    <div class="lomba-card">
-                        <img src="/public/poster1.jpg" alt="Lomba 1">
-                    </div>
-                    <div class="lomba-card">
-                        <img src="/public/poster2.jpg" alt="Lomba 2">
-                    </div>
-                    <div class="lomba-card">
-                        <img src="/public/poster3.jpg" alt="Lomba 3">
-                    </div>
+                    <h3>INFO LOMBA</h3>
+                    <div id="infoLombaContainer" class="lomba-cards"></div>
+                    <a href="#" class="btn-red">SELENGKAPNYA</a>
                 </div>
-                <a href="#" class="btn-red">SELENGKAPNYA</a>
-            </div>
         </div>
     </section>
 
@@ -160,12 +124,13 @@
                     alt="Partner">
             </div>
             <h2>MEET YOUR PARTNER</h2>
-            <a href="#" class="btn-red">SELENGKAPNYA</a>
+            <a href="" class="btn-red">SELENGKAPNYA</a>
         </div>
     </section>
 
     <!-- Footer -->
     <komponen footer />
+    <script src="/public/utamaLomba.js"></script>
 </body>
 
 </html>

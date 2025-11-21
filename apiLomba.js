@@ -19,6 +19,24 @@ route.get('/', async (req, res) => {
     }
 });
 
+// Get lomba posters only (open endpoint for homepage)
+route.get('/posters', async (req, res) => {
+    try {
+        // only approved lombas with a poster
+        const lombas = await Lomba.find({ status: 'approved', poster: { $exists: true, $ne: null } })
+            .select('poster title')
+            .sort({ createdAt: -1 })
+            .limit(6)
+            .lean();
+
+        const data = lombas.map(l => ({ id: l._id, title: l.title, poster: l.poster }));
+        res.json({ success: true, data });
+    } catch (error) {
+        console.error('Get lomba posters error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch lomba posters' });
+    }
+});
+
 // Get a single lomba by ID
 route.get('/:id', async (req, res) => {
     try {

@@ -2,6 +2,7 @@ import { del, put } from '@vercel/blob';
 import { Router } from "express";
 import formidable from 'formidable';
 import multer from 'multer';
+import adminRoute from './apiAdmin.js';
 import catatanRoute from "./apiCatatan.js";
 import friendRoute from './apiFriend.js';
 import kuisRoute from './apiKuis.js';
@@ -12,6 +13,7 @@ import User from "./skema/user.js";
 
 const route = Router();
 
+route.use("/admin", adminRoute);
 route.use("/kuis", kuisRoute);
 route.use("/friends", friendRoute);
 route.use("/lombas", lombaRoute);
@@ -72,7 +74,7 @@ route.post("/register", async (req, res) => {
                     reject(err);
                 } else {
                     console.log('Session saved successfully');
-                    resolve();
+                    resolve();  
                 }
             });
         });
@@ -366,6 +368,34 @@ route.post('/user/avatar', verifyToken, async (req, res) => {
             res.status(500).json({ success: false, message: 'Upload failed.' });
         }
     });
+});
+
+
+// Leaderboard - top users by level (and xp as tiebreaker)
+route.get('/leaderboard', async (req, res) => {
+    try {
+        // return top 5 users sorted by level desc, then xp desc
+        const topUsers = await User.find()
+            .select('displayName username avatar level xp')
+            .sort({ level: -1, xp: -1 })
+            .limit(5)
+            .lean();
+
+        // map to public shape
+        const payload = topUsers.map(u => ({
+            id: u._id || u.id,
+            username: u.username,
+            displayName: u.displayName,
+            avatar: u.avatar || '/public/defaultp.png',
+            level: u.level || 1,
+            xp: u.xp || 0
+        }));
+
+        res.json({ success: true, data: payload });
+    } catch (error) {
+        console.error('Leaderboard error', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch leaderboard' });
+    }
 });
 
 

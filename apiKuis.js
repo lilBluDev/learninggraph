@@ -1,7 +1,7 @@
+import { put } from "@vercel/blob";
 import { Router } from "express";
-import { put, del } from "@vercel/blob";
 import formidable from "formidable";
-import { verifyToken, isAdmin } from "./middleware/auth.js";
+import { isAdmin, verifyToken } from "./middleware/auth.js";
 import Kuis from "./skema/kuis.js";
 import KuisAttempt from "./skema/kuisAttempt.js";
 import KuisMatch from "./skema/kuisMatch.js";
@@ -21,14 +21,41 @@ route.post("/create", verifyToken, isAdmin, async (req, res) => {
             });
         }
 
+        // Validate questions structure
+        for (let q of questions) {
+            if (!q.id || !q.type || !q.question) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Setiap soal harus memiliki id, type, dan question."
+                });
+            }
+            
+            if (q.type === 'multiple_choice' || q.type === 'multiple_complex') {
+                if (!q.options || q.options.length < 2) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Soal pilihan ganda harus memiliki minimal 2 opsi."
+                    });
+                }
+            } else if (q.type === 'matching') {
+                if (!q.pairs || q.pairs.length < 2) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Soal matching harus memiliki minimal 2 pasangan."
+                    });
+                }
+            }
+        }
+
         const kuis = new Kuis({
             title,
-            description,
+            description: description || '',
             subject,
             duration: duration || 600,
             questions,
             createdBy: req.userId,
             isPublished: false
+            // totalPoints akan dihitung otomatis di pre-save hook
         });
 
         await kuis.save();
@@ -40,7 +67,10 @@ route.post("/create", verifyToken, isAdmin, async (req, res) => {
         });
     } catch (error) {
         console.error("Create quiz error:", error);
-        res.status(500).json({ success: false, message: "Gagal membuat kuis." });
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || "Gagal membuat kuis." 
+        });
     }
 });
 
@@ -142,12 +172,20 @@ route.get("/list", async (req, res) => {
         const filter = { isPublished: true };
         if (subject) filter.subject = subject;
 
-        const quizzes = await Kuis.find(filter)
-            .select('-questions')
+        // Fetch quizzes including questions temporarily so we can compute questionsCount,
+        // then strip full questions from response to avoid sending large payloads.
+        const quizzesRaw = await Kuis.find(filter)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(parseInt(limit))
             .populate('createdBy', 'displayName avatar');
+
+        const quizzes = quizzesRaw.map(q => {
+            const obj = q.toObject ? q.toObject() : q;
+            obj.questionsCount = Array.isArray(obj.questions) ? obj.questions.length : 0;
+            delete obj.questions;
+            return obj;
+        });
 
         const total = await Kuis.countDocuments(filter);
 
@@ -515,5 +553,168 @@ route.get("/match/:matchId", verifyToken, async (req, res) => {
         res.status(500).json({ success: false, message: "Gagal mengambil data match." });
     }
 });
+
+
+// Add this route to apiKuis.js
+
+// Get quiz attempt for player
+route.get("/attempt/:attemptId", verifyToken, async (req, res) => {
+    try {
+        const attempt = await KuisAttempt.findById(req.params.attemptId);
+
+        if (!attempt) {
+            return res.status(404).json({ success: false, message: "Attempt tidak ditemukan." });
+        }
+
+        if (attempt.user.toString() !== req.userId) {
+            return res.status(403).json({ success: false, message: "Anda tidak memiliki akses." });
+        }
+
+        const kuis = await Kuis.findById(attempt.kuis);
+
+        if (!kuis) {
+            return res.status(404).json({ success: false, message: "Kuis tidak ditemukan." });
+        }
+
+        res.json({
+            success: true,
+            data: {
+                attemptId: attempt._id,
+                duration: kuis.duration,
+                kuisTitle: kuis.title,
+                kuisSubject: kuis.subject,
+                questions: kuis.questions.map(q => ({
+                    id: q.id,
+                    type: q.type,
+                    question: q.question,
+                    image: q.image,
+                    points: q.points,
+                    options: q.type === 'multiple_choice' || q.type === 'multiple_complex' ? q.options : null,
+                    pairs: q.type === 'matching' ? q.pairs : null
+                })),
+                totalQuestions: kuis.questions.length,
+                totalPoints: kuis.totalPoints
+            }
+        });
+    } catch (error) {
+        console.error("Get attempt error:", error);
+        res.status(500).json({ success: false, message: "Gagal mengambil attempt." });
+    }
+});
+
+// Get attempt results
+route.get("/attempt/:attemptId/results", verifyToken, async (req, res) => {
+    try {
+        const attempt = await KuisAttempt.findById(req.params.attemptId)
+            .populate('kuis')
+            .populate('user', 'displayName avatar');
+
+        if (!attempt) {
+            return res.status(404).json({ success: false, message: "Attempt tidak ditemukan." });
+        }
+
+        if (attempt.user._id.toString() !== req.userId) {
+            return res.status(403).json({ success: false, message: "Anda tidak memiliki akses." });
+        }
+
+        const percentage = (attempt.score / attempt.totalScore * 100).toFixed(2);
+
+        // Determine grade
+        let grade = 'F';
+        if (percentage >= 90) grade = 'A';
+        else if (percentage >= 80) grade = 'B';
+        else if (percentage >= 70) grade = 'C';
+        else if (percentage >= 60) grade = 'D';
+
+        res.json({
+            success: true,
+            data: {
+                attemptId: attempt._id,
+                quizTitle: attempt.kuis.title,
+                quizSubject: attempt.kuis.subject,
+                score: attempt.score,
+                totalScore: attempt.totalScore,
+                percentage: parseFloat(percentage),
+                grade,
+                timeSpent: attempt.timeSpent,
+                totalTime: attempt.kuis.duration,
+                status: attempt.status,
+                mode: attempt.mode,
+                completedAt: attempt.completedAt,
+                answers: attempt.answers,
+                user: {
+                    displayName: attempt.user.displayName,
+                    avatar: attempt.user.avatar
+                }
+            }
+        });
+    } catch (error) {
+        console.error("Get results error:", error);
+        res.status(500).json({ success: false, message: "Gagal mengambil hasil." });
+    }
+});
+
+// Get match details for watching
+route.get("/match/watch/:matchId", verifyToken, async (req, res) => {
+    try {
+        const match = await KuisMatch.findById(req.params.matchId)
+            .populate('player1.userId', 'displayName avatar level')
+            .populate('player2.userId', 'displayName avatar level')
+            .populate('kuis', 'title subject');
+
+        if (!match) {
+            return res.status(404).json({ success: false, message: "Match tidak ditemukan." });
+        }
+
+        // Check if user is participant or admin
+        const isParticipant = match.player1.userId._id.toString() === req.userId ||
+                            (match.player2.userId && match.player2.userId._id.toString() === req.userId);
+        
+        if (!isParticipant) {
+            const user = await User.findById(req.userId);
+            if (!user.isAdmin()) {
+                return res.status(403).json({ success: false, message: "Anda tidak memiliki akses." });
+            }
+        }
+
+        res.json({
+            success: true,
+            data: {
+                matchId: match._id,
+                quizTitle: match.kuis.title,
+                quizSubject: match.kuis.subject,
+                status: match.status,
+                player1: {
+                    userId: match.player1.userId._id,
+                    displayName: match.player1.userId.displayName,
+                    avatar: match.player1.userId.avatar,
+                    level: match.player1.userId.level,
+                    score: match.player1.score,
+                    finishedAt: match.player1.finishedAt,
+                    joinedAt: match.player1.joinedAt
+                },
+                player2: match.player2.userId ? {
+                    userId: match.player2.userId._id,
+                    displayName: match.player2.userId.displayName,
+                    avatar: match.player2.userId.avatar,
+                    level: match.player2.userId.level,
+                    score: match.player2.score,
+                    finishedAt: match.player2.finishedAt,
+                    joinedAt: match.player2.joinedAt
+                } : null,
+                winner: match.winner,
+                firstFinished: match.firstFinished,
+                firstFinishedTime: match.firstFinishedTime,
+                startedAt: match.startedAt,
+                completedAt: match.completedAt,
+                duration: match.duration
+            }
+        });
+    } catch (error) {
+        console.error("Watch match error:", error);
+        res.status(500).json({ success: false, message: "Gagal mengambil data match." });
+    }
+});
+
 
 export default route;

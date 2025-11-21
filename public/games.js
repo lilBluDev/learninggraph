@@ -22,44 +22,61 @@ async function loadQuizzes(page = 1) {
         }
 
         const grid = document.getElementById('quizzesGrid');
-        grid.innerHTML = result.data.map(quiz => `
+        if (!Array.isArray(result.data) || result.data.length === 0) {
+            grid.innerHTML = '<div class="empty">Belum ada kuis.</div>';
+        } else {
+            grid.innerHTML = result.data.map(quiz => {
+                const questionsCount = typeof quiz.questionsCount === 'number'
+                    ? quiz.questionsCount
+                    : (Array.isArray(quiz.questions) ? quiz.questions.length : 0);
+                const durationMinutes = quiz.duration ? Math.floor(quiz.duration / 60) : 0;
+                const totalPoints = quiz.totalPoints ?? 0;
+                const title = escapeHtml(quiz.title || 'Untitled');
+                const subject = escapeHtml(quiz.subject || '');
+                const description = quiz.description ? `<div class="quiz-description">${escapeHtml(quiz.description)}</div>` : '';
+                const creatorName = (quiz.createdBy && quiz.createdBy.displayName) ? escapeHtml(quiz.createdBy.displayName) : 'Unknown';
+                const creatorInitial = creatorName.charAt(0).toUpperCase();
+                const id = quiz._id || '';
+
+                return `
             <div class="quiz-card">
                 <div class="quiz-header">
                     <div>
-                        <div class="quiz-title">${escapeHtml(quiz.title)}</div>
-                        <span class="quiz-subject">${quiz.subject}</span>
+                        <div class="quiz-title">${title}</div>
+                        <span class="quiz-subject">${subject}</span>
                     </div>
                 </div>
                 
                 <div class="quiz-stats">
                     <div class="quiz-stat">
                         <i class="fas fa-list"></i>
-                        <span>${quiz.questions.length} Soal</span>
+                        <span>${questionsCount} Soal</span>
                     </div>
                     <div class="quiz-stat">
                         <i class="fas fa-clock"></i>
-                        <span>${Math.floor(quiz.duration / 60)} Menit</span>
+                        <span>${durationMinutes} Menit</span>
                     </div>
                     <div class="quiz-stat">
                         <i class="fas fa-star"></i>
-                        <span>${quiz.totalPoints} Poin</span>
+                        <span>${totalPoints} Poin</span>
                     </div>
                 </div>
 
-                ${quiz.description ? `<div class="quiz-description">${escapeHtml(quiz.description)}</div>` : ''}
+                ${description}
 
                 <div class="quiz-creator">
-                    <div class="creator-avatar">${quiz.createdBy.displayName.charAt(0).toUpperCase()}</div>
-                    <span>Dibuat oleh ${escapeHtml(quiz.createdBy.displayName)}</span>
+                    <span>Dibuat oleh ${creatorName}</span>
                 </div>
 
                 <div class="quiz-actions">
-                    <button class="btn-start" onclick="selectGame('${quiz._id}')">
+                    <button class="btn-play" onclick="selectGame('${id}')">
                         <i class="fas fa-play"></i> Mulai
                     </button>
                 </div>
             </div>
-        `).join('');
+        `;
+            }).join('');
+        }
 
         // Pagination
         renderPagination(result.pagination);
@@ -109,6 +126,7 @@ function filterQuizzes() {
 
 function openGame(game) {
     currentGame = game;
+    window.location.href = `/u/games#${game}`;
     // Implementasi game lain bisa ditambahkan di sini
     if (game !== 'quiz-battle' && game !== 'quick-quiz') {
         showError('Game ini belum tersedia');

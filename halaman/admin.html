@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LearningGraph</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/global.css"/>
+    <link rel="stylesheet" href="/public/admin-dashbord.css"/>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin Panel</span>
+            </div>
+
+            <nav class="admin-nav">
+                <a href="#" class="nav-item active" onclick="switchTab('overview')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('users')">
+                    <i class="fas fa-users"></i>
+                    <span>Penanganan User</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('quiz-builder')">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Pembuatan Kuis</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('published-quizzes')">
+                    <i class="fas fa-book"></i>
+                    <span>Kuis Terpublikasi</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Pengaturan</span>
+                </a>
+            </nav>
+
+            <div class="admin-footer">
+                <button onclick="logoutAdmin()" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-content">
+                    <h1 id="pageTitle">Dashboard Overview</h1>
+                    <p id="pageSubtitle" class="muted">Kelola platform LearningGraph</p>
+                </div>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <span id="adminName">Admin</span>
+                        <div class="avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Tabs -->
+            <div class="admin-content">
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon users">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">Total Users</div>
+                                <div class="stat-value" id="totalUsers">0</div>
+                                <div class="stat-subtitle">Pengguna terdaftar</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon quizzes">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">Total Kuis</div>
+                                <div class="stat-value" id="totalQuizzes">0</div>
+                                <div class="stat-subtitle">Kuis yang dibuat</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon attempts">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">Total Attempts</div>
+                                <div class="stat-value" id="totalAttempts">0</div>
+                                <div class="stat-subtitle">Pengerjaan kuis</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon matches">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">Total Matches</div>
+                                <div class="stat-value" id="totalMatches">0</div>
+                                <div class="stat-subtitle">Pertandingan kuis</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-grid">
+                        <div class="overview-card">
+                            <h3>User Terbaru</h3>
+                            <div id="recentUsers" class="recent-list">
+                                <p class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat...</p>
+                            </div>
+                        </div>
+
+                        <div class="overview-card">
+                            <h3>Kuis Terbaru</h3>
+                            <div id="recentQuizzes" class="recent-list">
+                                <p class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Tab -->
+                <div id="users" class="tab-content">
+                    <div class="section-header">
+                        <div>
+                            <h2>Penanganan User</h2>
+                            <p class="muted">Kelola pengguna platform</p>
+                        </div>
+                        <div class="header-actions">
+                            <input type="text" id="userSearch" placeholder="Cari user..." onkeyup="searchUsers()" class="search-input">
+                        </div>
+                    </div>
+
+                    <div class="users-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Nama</th>
+                                    <th>Role</th>
+                                    <th>Level</th>
+                                    <th>Bergabung</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="usersPagination" class="pagination"></div>
+                </div>
+
+                <!-- Quiz Builder Tab -->
+                <div id="quiz-builder" class="tab-content">
+                    <div class="section-header">
+                        <div>
+                            <h2>Pembuatan Kuis</h2>
+                            <p class="muted">Buat kuis baru untuk platform</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-builder">
+                        <div class="builder-form">
+                            <!-- Basic Info -->
+                            <div class="form-section">
+                                <h3>Informasi Dasar</h3>
+                                <div class="form-group">
+                                    <label>Judul Kuis *</label>
+                                    <input type="text" id="quizTitle" placeholder="Masukkan judul kuis" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Mata Pelajaran *</label>
+                                        <select id="quizSubject" required>
+                                            <option value="">Pilih mata pelajaran</option>
+                                            <option value="Matematika">Matematika</option>
+                                            <option value="Fisika">Fisika</option>
+                                            <option value="Kimia">Kimia</option>
+                                            <option value="Biologi">Biologi</option>
+                                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                            <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                            <option value="Sejarah">Sejarah</option>
+                                            <option value="Geografi">Geografi</option>
+                                            <option value="Ekonomi">Ekonomi</option>
+                                            <option value="Sosiologi">Sosiologi</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Durasi (Menit) *</label>
+                                        <input type="number" id="quizDuration" placeholder="10" min="1" max="60" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Deskripsi</label>
+                                    <textarea id="quizDescription" placeholder="Deskripsi kuis (opsional)" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Questions -->
+                            <div class="form-section">
+                                <div class="section-header">
+                                    <h3>Soal Kuis</h3>
+                                    <button class="btn-add-question" onclick="addNewQuestion()">
+                                        <i class="fas fa-plus"></i> Tambah Soal
+                                    </button>
+                                </div>
+                                <div id="questionsList" class="questions-list">
+                                    <p class="empty-state">Belum ada soal. Klik tombol di atas untuk menambah.</p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="form-actions">
+                                <button class="btn-secondary" onclick="resetQuizForm()">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                                <button class="btn-primary" onclick="saveQuiz()">
+                                    <i class="fas fa-save"></i> Simpan Kuis
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Published Quizzes Tab -->
+                <div id="published-quizzes" class="tab-content">
+                    <div class="section-header">
+                        <div>
+                            <h2>Kuis Terpublikasi</h2>
+                            <p class="muted">Kelola kuis yang sudah dipublikasikan</p>
+                        </div>
+                        <div class="header-actions">
+                            <input type="text" id="quizSearch" placeholder="Cari kuis..." onkeyup="searchQuizzes()" class="search-input">
+                        </div>
+                    </div>
+
+                    <div class="quizzes-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Judul</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Soal</th>
+                                    <th>Durasi</th>
+                                    <th>Percobaan</th>
+                                    <th>Dibuat</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quizzesTableBody">
+                                <tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Memuat...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="quizzesPagination" class="pagination"></div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings" class="tab-content">
+                    <div class="section-header">
+                        <h2>Pengaturan</h2>
+                        <p class="muted">Konfigurasi platform</p>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3><i class="fas fa-bell"></i> Notifikasi</h3>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" checked> Kirim email notifikasi
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" checked> Notifikasi admin baru
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-lock"></i> Keamanan</h3>
+                            <button class="btn-secondary" style="width: 100%;">
+                                <i class="fas fa-key"></i> Ubah Password
+                            </button>
+                            <button class="btn-secondary" style="width: 100%; margin-top: 1rem;">
+                                <i class="fas fa-shield-alt"></i> Kelola Akses Admin
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- User Detail Modal -->
+    <div id="userModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeUserModal()">&times;</button>
+            <h2>Detail User</h2>
+            <div id="userModalContent"></div>
+        </div>
+    </div>
+
+    <!-- Edit Question Modal -->
+    <div id="questionModal" class="modal hidden">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeQuestionModal()">&times;</button>
+            <h2 id="questionModalTitle">Edit Soal</h2>
+            <form id="questionForm" onsubmit="saveQuestion(event)">
+                <div class="form-group">
+                    <label>Tipe Soal *</label>
+                    <select id="questionType" onchange="updateQuestionTypeOptions()" required>
+                        <option value="">Pilih tipe soal</option>
+                        <option value="multiple_choice">Pilihan Ganda</option>
+                        <option value="multiple_complex">Pilihan Ganda Kompleks</option>
+                        <option value="matching">Matching (Mencocokkan)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Pertanyaan *</label>
+                    <textarea id="questionText" placeholder="Masukkan pertanyaan" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Gambar (Opsional)</label>
+                    <input type="file" id="questionImage" accept="image/*">
+                    <div id="imagePreview" class="image-preview hidden">
+                        <img id="previewImg" src="" alt="preview">
+                        <button type="button" onclick="removeImage()" class="btn-remove-image">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Poin *</label>
+                    <input type="number" id="questionPoints" value="10" min="1" required>
+                </div>
+
+                <!-- Options (for multiple choice & complex) -->
+                <div id="optionsContainer" class="form-group hidden">
+                    <label>Opsi Jawaban *</label>
+                    <div id="optionsList"></div>
+                    <button type="button" onclick="addOption()" class="btn-add-option">
+                        <i class="fas fa-plus"></i> Tambah Opsi
+                    </button>
+                </div>
+
+                <!-- Pairs (for matching) -->
+                <div id="pairsContainer" class="form-group hidden">
+                    <label>Pasangan Matching *</label>
+                    <div id="pairsList"></div>
+                    <button type="button" onclick="addPair()" class="btn-add-option">
+                        <i class="fas fa-plus"></i> Tambah Pasangan
+                    </button>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeQuestionModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan Soal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/public/admin-dashboard.js"></script>
+</body>
+</html>

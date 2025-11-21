@@ -13,6 +13,7 @@ body {
 :root {
     --primary: #ff9800; /* orange accent to match jadwal */
     --secondary: #d97706;
+    --surface: #ffffff;
 }
 /* Base button styles: provide a single source of truth for buttons across pages */
 .btn {

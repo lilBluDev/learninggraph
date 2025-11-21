@@ -54,7 +54,6 @@ const kuisSchema = new mongoose.Schema({
             text: String,
             isCorrect: Boolean
         }],
-        // For multiple_complex (can have multiple correct answers)
         // For matching: pairs of items to match
         pairs: [{
             leftId: String,
@@ -71,7 +70,8 @@ const kuisSchema = new mongoose.Schema({
     }],
     totalPoints: {
         type: Number,
-        required: true
+        default: 0,
+        min: 0
     },
     isPublished: {
         type: Boolean,
@@ -85,12 +85,18 @@ const kuisSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Update totalPoints before save
+// Calculate and set totalPoints before save
 kuisSchema.pre('save', function(next) {
-    if (this.questions && this.questions.length > 0) {
-        this.totalPoints = this.questions.reduce((sum, q) => sum + (q.points || 10), 0);
+    try {
+        if (this.questions && this.questions.length > 0) {
+            this.totalPoints = this.questions.reduce((sum, q) => sum + (q.points || 10), 0);
+        } else {
+            this.totalPoints = 0;
+        }
+        next();
+    } catch (error) {
+        next(error);
     }
-    next();
 });
 
 const Kuis = mongoose.model('Kuis', kuisSchema);
