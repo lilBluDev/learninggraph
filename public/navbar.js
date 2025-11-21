@@ -5,17 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!navAuth) return;
 
     // Remove old logout if exists
-    let logoutBtn = document.getElementById('navbarLogoutBtn');
+    let logoutBtn = document.getElementById('navbarDashboardBtn');
     if (logoutBtn) logoutBtn.remove();
 
     // Check token
     const token = localStorage.getItem('token');
     if (token) {
         // Hide login/daftar, show logout
-        navAuth.innerHTML = `<button id="navbarLogoutBtn" class="nav-logout">Logout</button>`;
-        document.getElementById('navbarLogoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('token');
-            window.location.href = '/daftarlogin.html';
+        navAuth.innerHTML = `<button id="navbarDashboardBtn" class="nav-dash">Ke Dashboard</button>`;
+        document.getElementById('navbarDashboardBtn').addEventListener('click', () => {
+            window.location.href = '/u/';
         });
     } else {
         // Show login/daftar

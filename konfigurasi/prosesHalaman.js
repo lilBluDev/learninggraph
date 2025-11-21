@@ -108,7 +108,7 @@ export default function prosesHalaman(halaman) {
     //             const cssContent = fs.readFileSync(dashboardCssPath, 'utf8');
     //             const styleTag = `<style id="inline-dashboard-css">\n${cssContent}\n</style>`;
     //             data = injectIntoHead(data, styleTag);
-    //         }
+    //         }x
     //     }
     // } catch (err) {
     //     console.error('Gagal meng-inline dashboard CSS:', err.message);
@@ -129,7 +129,7 @@ export default function prosesHalaman(halaman) {
         console.error('Gagal meng-inline navbar CSS:', err.message);
     }
 
-    console.log(data);
+    // console.log(data);
 
     halamanCache.set(halaman, data);
     return data;

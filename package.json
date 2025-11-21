@@ -27,7 +27,8 @@
     "formidable": "^3.5.4",
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.3"
+    "mongoose": "^8.19.3",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
     "dotenv": "^17.2.3",

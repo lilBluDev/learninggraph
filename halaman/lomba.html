@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearningGraph - Lomba</title>
+    <title>LearningGraph - Lowongan Lomba</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/public/global.css"/>
     <link rel="stylesheet" href="/public/sidebar.css"/>
@@ -11,20 +11,154 @@
 </head>
 <body>
     <komponen sidebar />
-
-    <main class="main-content">
-        <section class="header">
-            <h1><i class="fas fa-trophy"></i> Lomba</h1>
-            <p class="muted">Daftar dan ikuti kompetisi edukatif</p>
-            <div class="filter-section">
-                <button class="filter-btn active" onclick="filterCompetition('all')">Semua</button>
-                <button class="filter-btn" onclick="filterCompetition('ongoing')">Sedang Berlangsung</button>
-                <button class="filter-btn" onclick="filterCompetition('upcoming')">Akan Datang</button>
-                <button class="filter-btn" onclick="filterCompetition('finished')">Selesai</button>
+    
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div>
+                    <h1><i class="fas fa-trophy"></i> Lowongan Lomba</h1>
+                    <p>Temukan dan ikuti berbagai lomba menarik</p>
+                </div>
+                <button class="btn btn-primary" onclick="openSubmitModal()">
+                    <i class="fas fa-plus-circle"></i> Submit Lomba
+                </button>
             </div>
-            <div class="competitions-grid" id="competitionsGrid"></div>
-        </section>
-    </main>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <label><i class="fas fa-filter"></i> Kategori:</label>
+                <select id="categoryFilter" onchange="filterLomba()">
+                    <option value="all">Semua Kategori</option>
+                    <option value="akademik">Akademik</option>
+                    <option value="teknologi">Teknologi</option>
+                    <option value="seni">Seni & Desain</option>
+                    <option value="olahraga">Olahraga</option>
+                    <option value="bisnis">Bisnis</option>
+                    <option value="lainnya">Lainnya</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label><i class="fas fa-clock"></i> Status:</label>
+                <select id="statusFilter" onchange="filterLomba()">
+                    <option value="all">Semua Status</option>
+                    <option value="open">Dibuka</option>
+                    <option value="closing-soon">Segera Ditutup</option>
+                    <option value="closed">Ditutup</option>
+                </select>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari lomba..." onkeyup="filterLomba()">
+            </div>
+        </div>
+
+        <!-- Lomba Grid -->
+        <div id="lombaGrid" class="lomba-grid">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-trophy"></i>
+            <h3>Belum Ada Lomba</h3>
+            <p>Belum ada lomba yang tersedia saat ini</p>
+        </div>
+    </div>
+
+    <!-- Modal Detail Lomba -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="modal-close" onclick="closeDetailModal()">&times;</span>
+            <div id="modalDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Modal Submit Lomba -->
+    <div id="submitModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeSubmitModal()">&times;</span>
+            <h2><i class="fas fa-paper-plane"></i> Submit Lomba Baru</h2>
+            <p class="modal-subtitle">Lomba yang Anda submit akan direview admin terlebih dahulu</p>
+            
+            <form id="submitLombaForm">
+                <div class="form-group">
+                    <label>Nama Lomba <span class="required">*</span></label>
+                    <input type="text" id="lombaTitle" placeholder="Contoh: Kompetisi Coding Nasional" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kategori <span class="required">*</span></label>
+                        <select id="lombaCategory" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="akademik">Akademik</option>
+                            <option value="teknologi">Teknologi</option>
+                            <option value="seni">Seni & Desain</option>
+                            <option value="olahraga">Olahraga</option>
+                            <option value="bisnis">Bisnis</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tingkat <span class="required">*</span></label>
+                        <select id="lombaLevel" required>
+                            <option value="">Pilih Tingkat</option>
+                            <option value="sekolah">Sekolah</option>
+                            <option value="regional">Regional</option>
+                            <option value="nasional">Nasional</option>
+                            <option value="internasional">Internasional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Deadline <span class="required">*</span></label>
+                        <input type="date" id="lombaDeadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Penyelenggara <span class="required">*</span></label>
+                        <input type="text" id="lombaOrganizer" placeholder="Nama Penyelenggara" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Deskripsi <span class="required">*</span></label>
+                    <textarea id="lombaDescription" rows="4" placeholder="Jelaskan tentang lomba ini..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Hadiah</label>
+                    <input type="text" id="lombaPrize" placeholder="Contoh: Juara 1: Rp 10.000.000">
+                </div>
+
+                <div class="form-group">
+                    <label>Kontak <span class="required">*</span></label>
+                    <input type="text" id="lombaContact" placeholder="Email/WhatsApp/Instagram" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Link Pendaftaran <span class="required">*</span></label>
+                    <input type="url" id="lombaLink" placeholder="https://..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Poster (Optional)</label>
+                    <input type="file" id="lombaPoster" accept="image/*" onchange="previewPoster(event)">
+                    <div id="posterPreview" class="poster-preview"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeSubmitModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit untuk Review
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="/public/sidebar.js"></script>
     <script src="/public/lomba.js"></script>

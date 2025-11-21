@@ -100,7 +100,7 @@ class DashboardManager {
 
         friendsList.innerHTML = friends.map(friendId => `
             <div class="friend-item" data-id="${friendId}">
-                <img src="/public/default-avatar.png" alt="Friend Avatar" class="friend-avatar">
+                <img src="/public/defaultp.png" alt="Friend Avatar" class="friend-avatar">
                 <span class="friend-name">Friend ${friendId.slice(-4)}</span>
             </div>
         `).join('');

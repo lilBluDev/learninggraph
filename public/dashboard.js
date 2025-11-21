@@ -1,66 +1,54 @@
 // Dashboard page logic - fetch and display user data
 document.addEventListener('DOMContentLoaded', async () => {
-        // Logout button logic
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                localStorage.removeItem('token');
-                window.location.href = '/daftarlogin.html';
-            });
-        }
     try {
         const token = localStorage.getItem('token');
-        console.log('[dashboard.js] Token:', token ? 'Found' : 'Not found');
-        
+        if (!token) {
+            if (window.location.pathname.startsWith('/u/')) {
+                window.location.href = '/daftarlogin';
+                return;
+            }
+        }
         // Fetch user data from API
         const response = await fetch('/api/user', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-
-        console.log('[dashboard.js] API response status:', response.status);
-
         if (!response.ok) {
-            const errorData = await response.text();
-            console.error('[dashboard.js] API error:', errorData);
-            throw new Error(`Failed to fetch user: ${response.status}`);
+            if (window.location.pathname.startsWith('/u/')) {
+                window.location.href = '/daftarlogin';
+                return;
+            }
+            throw new Error('Failed to fetch user');
         }
-
         const result = await response.json();
-        console.log('[dashboard.js] API response:', result);
-        
-        // Extract user data from response
         const user = result.data || result;
-        console.log('[dashboard.js] User data loaded:', user);
-
         if (!user) {
+            if (window.location.pathname.startsWith('/u/')) {
+                window.location.href = '/daftarlogin';
+                return;
+            }
             throw new Error('No user data in response');
         }
-
         // Populate user name in composer
         updateComposerInfo(user);
-
         // Populate Level & XP Card
         populateLevelCard(user);
-
         // Populate Friends Card
         populateFriendsCard(user);
-
         // Populate Notifications Card
         populateNotificationsCard(user);
-
-
         // Setup post composer
         setupPostComposer(user);
-
         // Fetch and render post feed
         await fetchAndRenderFeed(user);
-
         // Update sidebar user card
         updateSidebarUserCard(user);
-
     } catch (error) {
+        if (window.location.pathname.startsWith('/u/')) {
+            window.location.href = '/daftarlogin';
+            return;
+        }
         console.error('[dashboard.js] Error fetching user data:', error);
         setDefaultValues();
     }
@@ -69,9 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Update composer with user info
 function updateComposerInfo(user) {
     const composerAvatar = document.getElementById('composerAvatar');
-    if (user.avatar) {
-        composerAvatar.src = user.avatar;
-    }
+    if (composerAvatar) composerAvatar.src = user.avatar ? user.avatar : '/public/defaultp.png';
 }
 
 // Populate Level & XP Card
@@ -148,6 +134,8 @@ function setDefaultValues() {
     document.getElementById('friendsText').textContent = 'Unable to load friends';
     document.getElementById('notificationsCount').textContent = '0';
     document.getElementById('notificationsText').textContent = 'Unable to load notifications';
+    const composerAvatar = document.getElementById('composerAvatar');
+    if (composerAvatar) composerAvatar.src = '/public/defaultp.png';
 }
 
 // --- Post Composer and Feed Logic ---
@@ -156,11 +144,7 @@ function setupPostComposer(user) {
     const postBtn = document.getElementById('postBtn');
     const feedContainer = document.getElementById('feedContainer');
     const composerAvatar = document.getElementById('composerAvatar');
-
-    // Set user avatar if available
-    if (user.avatar) {
-        composerAvatar.src = user.avatar;
-    }
+    if (composerAvatar) composerAvatar.src = user.avatar ? user.avatar : '/public/defaultp.png';
 
     // Enable/disable post button based on input
     postInput.addEventListener('input', () => {
@@ -247,7 +231,7 @@ function renderPostItem(post, currentUser, prepend = false) {
     // Author info
     const author = post.author || {};
     const isAuthor = currentUser && (author._id === currentUser._id || author.username === currentUser.username);
-    const avatarUrl = author.avatar || '/public/default-profile.png';
+    const avatarUrl = author.avatar ? author.avatar : '/public/defaultp.png';
     const displayName = author.displayName || author.name || 'User';
     const username = author.username || 'user';
     const timeAgo = timeSince(new Date(post.createdAt || Date.now()));
@@ -262,7 +246,7 @@ function renderPostItem(post, currentUser, prepend = false) {
     postElement.className = 'post-item';
     postElement.innerHTML = `
         <div class="post-header">
-            <img src="${avatarUrl}" alt="Avatar" class="post-avatar">
+            <img src="${avatarUrl ? avatarUrl : "/public/defaultp.png"}" alt="Avatar" class="post-avatar">
             <div class="post-author-info">
                 <p class="post-author-name">${displayName}</p>
                 <p class="post-author-handle">@${username}</p>
@@ -438,7 +422,7 @@ function updateSidebarUserCard(user) {
     const name = document.querySelector('.sidebar .user-name');
     const username = document.querySelector('.sidebar .user-username');
     const email = document.querySelector('.sidebar .user-email');
-    if (avatar && user.avatar) avatar.src = user.avatar;
+    if (avatar) avatar.src = user.avatar ? user.avatar : '/public/defaultp.png';
     if (name && (user.displayName || user.name)) name.textContent = user.displayName || user.name;
     if (username && user.username) username.textContent = '@' + user.username;
     if (email && user.email) email.textContent = user.email;

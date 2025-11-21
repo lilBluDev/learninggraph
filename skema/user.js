@@ -54,7 +54,12 @@ const userSchema = new mongoose.Schema({
     }],
     avatar: {
         type: String,
-        default: '/public/default-avatar.png'
+        default: '/public/defaultp.png'
+    },
+    role: {
+        type: String,
+        enum: ['USER', 'ADMIN'],
+        default: 'USER'
     },
     achievements: [{
         name: String,
@@ -89,6 +94,10 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
+userSchema.methods.isAdmin = function() {
+    return this.role === 'ADMIN';
+};
+
 // Method untuk menghitung level dari XP
 userSchema.methods.calculateLevel = function() {
     this.level = Math.floor(this.xp / 100) + 1;
@@ -111,6 +120,7 @@ userSchema.methods.toPublicJSON = function() {
         email: this.email,
         description: this.description,
         level: this.level,
+        role: this.role,
         xp: this.xp,
         friends: this.friends,
         selectedSubjects: this.selectedSubjects,

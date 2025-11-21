@@ -11,6 +11,7 @@ import connectDB from "./konfigurasi/database.js";
 import prosesHalaman, { watchFiles } from "./konfigurasi/prosesHalaman.js";
 
 import { default as APIroute } from "./api.js";
+import apiJadwal from './apiJadwal.js';
 import UpstashStore from "./konfigurasi/UpstashStore.js";
 import { redirectIfAuth, requireAuth } from "./middleware/auth.js";
 import UserRoute from "./uRoute.js";
@@ -72,6 +73,7 @@ const sessionConfig = {
 };
 
 // CRITICAL: Add domain for production
+app.use('/api/jadwal', apiJadwal);
 if (process.env.ENV === "PROD" && process.env.COOKIE_DOMAIN) {
     sessionConfig.cookie.domain = process.env.COOKIE_DOMAIN;
 }

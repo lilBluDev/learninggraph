@@ -6,22 +6,89 @@
     <title>LearningGraph - Jadwal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/public/global.css"/>
-    <link rel="stylesheet" href="/public/sidebar.css"/>
     <link rel="stylesheet" href="/public/jadwal.css"/>
+    <link rel="stylesheet" href="/public/sidebar.css"/>
 </head>
 <body>
     <komponen sidebar />
 
-    <main class="main-content">
-        <section class="header">
-            <h1><i class="fas fa-calendar-alt"></i> Jadwal</h1>
-            <p class="muted">Atur jadwal belajar dan aktivitas kamu</p>
-            <button class="btn btn-primary" onclick="showAddScheduleModal()"><i class="fas fa-plus"></i> Tambah Jadwal</button>
-            <div class="schedule-container" id="scheduleContainer"></div>
-        </section>
-    </main>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calendar-alt"></i> Jadwal & Agenda</h1>
+            <p>Kelola jadwal dan todo list Anda dengan mudah</p>
+        </div>
 
-    <script src="/public/sidebar.js"></script>
+        <div class="main-grid">
+            <!-- Kalender -->
+            <div class="card">
+                <div class="calendar-header">
+                    <h3 id="currentMonth"></h3>
+                    <div class="calendar-nav">
+                        <button onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                        <button onclick="changeMonth(0)"><i class="fas fa-home"></i></button>
+                        <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+
+                <div class="section-divider">
+                    <h2><i class="fas fa-list-check"></i> Daftar Event</h2>
+                    <div id="eventList"></div>
+                </div>
+            </div>
+
+            <!-- Form & Todo -->
+            <div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <h2><i class="fas fa-plus-circle"></i> Tambah Event</h2>
+                    <form id="eventForm">
+                        <div class="form-group">
+                            <label>Judul Event</label>
+                            <input type="text" id="eventTitle" placeholder="Contoh: Meeting Project" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tanggal</label>
+                                <input type="date" id="eventDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Waktu</label>
+                                <input type="time" id="eventTime" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Keterangan</label>
+                            <textarea id="eventDesc" rows="3" placeholder="Deskripsi singkat..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Prioritas</label>
+                            <select id="eventPriority">
+                                <option value="normal">Normal</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Simpan Event
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-clipboard-list"></i> Todo List</h2>
+                    <form id="todoForm" style="margin-bottom: 20px;">
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <input type="text" id="todoInput" placeholder="Tambah todo baru..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Todo
+                        </button>
+                    </form>
+                    <div id="todoList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/public/jadwal.js"></script>
 </body>
 </html>

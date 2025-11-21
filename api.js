@@ -1,17 +1,24 @@
 import { del, put } from '@vercel/blob';
 import { Router } from "express";
 import formidable from 'formidable';
+import multer from 'multer';
 import catatanRoute from "./apiCatatan.js";
 import postRoute from './apiPost.js';
+import lombaRoute from './apiLomba.js';
+import friendRoute from './apiFriend.js';
 import { generateToken, verifyToken } from "./middleware/auth.js";
 import User from "./skema/user.js";
 
 const route = Router();
 
+route.use("/friends", friendRoute);
+route.use("/lombas", lombaRoute);
 route.use("/catatan", catatanRoute);
 route.use('/posts', postRoute);
 
-// Register
+// Configure multer for file uploads
+const upload = multer({ storage: multer.memoryStorage() });
+
 route.post("/register", async (req, res) => {
     try {
         const { username, displayName, email, password, selectedSubjects } = req.body;
@@ -35,7 +42,8 @@ route.post("/register", async (req, res) => {
             displayName,
             email,
             password,
-            selectedSubjects: selectedSubjects || []
+            selectedSubjects: selectedSubjects || [],
+            role: 'USER' // explicitly set default role on registration
         });
 
         await user.save();
@@ -183,6 +191,7 @@ route.get("/user", verifyToken, async (req, res) => {
                 username: user.username,
                 displayName: user.displayName,
                 email: user.email,
+                role: user.role,
                 description: user.description,
                 level: user.level,
                 xp: user.xp,
@@ -343,7 +352,7 @@ route.post('/user/avatar', verifyToken, async (req, res) => {
             const user = await User.findById(req.userId);
             if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
             // Delete old avatar if not default
-            if (user.avatar && !user.avatar.includes('default-avatar')) {
+            if (user.avatar && !user.avatar.includes('defaultp')) {
                 try { await del(user.avatar); } catch (e) { /* ignore */ }
             }
             // Upload new avatar
@@ -356,5 +365,6 @@ route.post('/user/avatar', verifyToken, async (req, res) => {
         }
     });
 });
+
 
 export default route;
